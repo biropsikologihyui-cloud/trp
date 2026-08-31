@@ -14,7 +14,7 @@
         ::-webkit-scrollbar-thumb:hover { background: #4ade80; }
     </style>
 </head>
-<body class="bg-gradient-to-br from-emerald-50 via-slate-50 to-teal-50 text-slate-800 min-h-screen flex flex-col items-center justify-center p-2 sm:p-6">
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col">
 
     <!-- Modal Notifikasi -->
     <div id="custom-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
@@ -26,11 +26,9 @@
         </div>
     </div>
 
-    <!-- Container Utama (Responsif HP & Web) -->
-    <div id="app" class="w-full max-w-lg bg-white/90 backdrop-blur-xl shadow-2xl rounded-3xl overflow-hidden flex flex-col min-h-[700px] max-h-[94vh] border border-white">
-        
-        <!-- Login View -->
-        <div id="login-view" class="flex flex-col flex-grow p-6 sm:p-8 justify-center">
+    <!-- Login View (Fullscreen Centered) -->
+    <div id="login-view" class="flex flex-col flex-grow items-center justify-center p-4 sm:p-6 bg-gradient-to-br from-emerald-50 via-slate-50 to-teal-50 min-h-screen">
+        <div class="w-full max-w-md bg-white/90 backdrop-blur-xl shadow-2xl rounded-3xl p-6 sm:p-8 border border-white">
             <div class="text-center mb-8">
                 <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-tr from-emerald-600 to-teal-500 text-white rounded-3xl mb-4 text-3xl shadow-xl shadow-emerald-200">
                     🌱
@@ -60,98 +58,121 @@
             </form>
 
             <div id="login-error" class="hidden mt-4 p-3 bg-red-50 text-red-600 text-xs rounded-2xl text-center font-bold border border-red-100"></div>
-
-            <div class="mt-8 pt-6 border-t border-slate-100 text-center">
-                <p class="text-xs text-slate-400 mb-3 font-semibold">⚡ Coba Akses Cepat Demo Akun:</p>
-                <div class="flex flex-wrap gap-2 justify-center">
-                    <button onclick="quickLogin('budi.terapis@hyui.com', '123456')" class="text-xs bg-slate-100 hover:bg-emerald-600 hover:text-white px-3.5 py-2 rounded-xl border border-slate-200/80 transition font-semibold">Terapis (Budi)</button>
-                    <button onclick="quickLogin('siti.terapis@hyui.com', '123456')" class="text-xs bg-slate-100 hover:bg-emerald-600 hover:text-white px-3.5 py-2 rounded-xl border border-slate-200/80 transition font-semibold">Terapis (Siti)</button>
-                    <button onclick="quickLogin('admin@hyui.com', '123456')" class="text-xs bg-slate-100 hover:bg-emerald-600 hover:text-white px-3.5 py-2 rounded-xl border border-slate-200/80 transition font-semibold">Admin</button>
-                    <button onclick="quickLogin('supervisor@hyui.com', '123456')" class="text-xs bg-slate-100 hover:bg-emerald-600 hover:text-white px-3.5 py-2 rounded-xl border border-slate-200/80 transition font-semibold">Supervisor</button>
-                </div>
-            </div>
         </div>
+    </div>
 
-        <!-- Dashboard View -->
-        <div id="dashboard-view" class="hidden flex flex-col flex-grow overflow-hidden">
-            
-            <!-- Header Dashboard -->
-            <header class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white p-4 sm:p-5 flex justify-between items-center shadow-lg shrink-0">
-                <div class="flex items-center space-x-3">
-                    <div class="w-11 h-11 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center font-bold text-lg shadow-inner" id="user-avatar">
-                        B
+    <!-- Dashboard View (Layout Web Lebar / Sidebar Kiri) -->
+    <div id="dashboard-view" class="hidden flex-grow flex flex-col md:flex-row h-screen overflow-hidden">
+        
+        <!-- Sidebar Menu (Desktop) / Navbar Bawah/Atas (Mobile) -->
+        <aside class="w-full md:w-72 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 shadow-sm z-20">
+            <div>
+                <!-- Logo / Header Sidebar -->
+                <div class="p-5 border-b border-slate-100 flex items-center space-x-3 bg-gradient-to-r from-emerald-50 to-teal-50">
+                    <div class="w-10 h-10 bg-emerald-600 text-white rounded-2xl flex items-center justify-center font-bold text-lg shadow-md shadow-emerald-200">
+                        🌱
                     </div>
                     <div>
-                        <h2 id="user-display-name" class="font-bold text-sm sm:text-base leading-tight">Nama Pengguna</h2>
-                        <span id="user-display-role" class="text-[10px] bg-white/20 backdrop-blur-md text-white px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">Peran</span>
+                        <h2 class="font-extrabold text-slate-900 text-sm">Biro Psikologi Hyui</h2>
+                        <span class="text-[10px] text-emerald-700 font-bold uppercase tracking-wider">Monitoring Terapi</span>
                     </div>
                 </div>
-                <button onclick="handleLogout()" class="bg-red-500/20 hover:bg-red-500 text-white border border-white/20 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
-                    Keluar 🚪
+
+                <!-- User Info Profile Card -->
+                <div class="p-4 m-3 bg-slate-50 rounded-2xl border border-slate-100 flex items-center gap-3">
+                    <div id="user-avatar" class="w-10 h-10 bg-emerald-600 text-white font-bold rounded-xl flex items-center justify-center text-sm shadow">
+                        B
+                    </div>
+                    <div class="overflow-hidden">
+                        <h3 id="user-display-name" class="font-bold text-slate-900 text-xs truncate">Nama Pengguna</h3>
+                        <span id="user-display-role" class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-extrabold uppercase">Peran</span>
+                    </div>
+                </div>
+
+                <!-- Navigasi Menu Sidebar -->
+                <nav id="nav-tabs" class="p-3 space-y-1.5 flex flex-row md:flex-col overflow-x-auto gap-1 md:gap-0">
+                </nav>
+            </div>
+
+            <!-- Tombol Keluar di Bawah Sidebar -->
+            <div class="p-4 border-t border-slate-100 hidden md:block">
+                <button onclick="handleLogout()" class="w-full bg-red-50 hover:bg-red-500 hover:text-white text-red-600 border border-red-200 py-2.5 rounded-2xl text-xs font-bold transition flex items-center justify-center gap-2 shadow-sm">
+                    Keluar Sistem 🚪
+                </button>
+            </div>
+        </aside>
+
+        <!-- Area Konten Utama (Luas / Full Width Layar Laptop) -->
+        <main class="flex-grow flex flex-col h-full overflow-hidden bg-slate-50/50">
+            
+            <!-- Header Atas Khusus Mobile / Info Cepat -->
+            <header class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center shrink-0 shadow-xs">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-extrabold text-slate-400 uppercase tracking-widest">Workspace Aktif</span>
+                    <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-100">Live Sync Google Sheets</span>
+                </div>
+                <button onclick="handleLogout()" class="md:hidden bg-red-500 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm">
+                    Keluar
                 </button>
             </header>
 
-            <!-- Navigasi Tab -->
-            <nav id="nav-tabs" class="bg-white border-b border-slate-100 px-4 py-3 flex gap-2 overflow-x-auto text-xs font-bold shrink-0 shadow-sm">
-            </nav>
-
-            <!-- Konten Utama Dashboard -->
-            <div class="flex-grow overflow-y-auto p-4 sm:p-6 bg-slate-50/50 relative">
+            <!-- Container Konten Tab -->
+            <div class="flex-grow overflow-y-auto p-4 sm:p-8 max-w-6xl w-full mx-auto">
                 
                 <!-- Tab Input Sesi -->
-                <div id="content-input" class="space-y-4">
-                    <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
-                        <h3 class="text-xs font-extrabold uppercase tracking-widest text-emerald-600 mb-4 flex items-center gap-2">
-                            <span class="p-2 bg-emerald-50 rounded-xl">📝</span> Form Pencatatan Sesi Terapi Baru
+                <div id="content-input" class="space-y-6">
+                    <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-200/60 max-w-3xl mx-auto">
+                        <h3 class="text-sm font-extrabold uppercase tracking-widest text-emerald-600 mb-6 flex items-center gap-2.5">
+                            <span class="p-2.5 bg-emerald-50 rounded-2xl text-base">📝</span> Form Pencatatan Sesi Terapi Baru
                         </h3>
                         
-                        <form id="sesi-form" onsubmit="submitSesi(event)" class="space-y-3.5">
+                        <form id="sesi-form" onsubmit="submitSesi(event)" class="space-y-4">
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Klien Binaan (Ditugaskan Admin)</label>
-                                <select id="select-klien" required class="w-full p-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium">
+                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Klien Binaan (Ditugaskan Admin)</label>
+                                <select id="select-klien" required class="w-full p-3.5 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium">
                                 </select>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-3">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-600 mb-1.5">Tanggal Sesi</label>
-                                    <input type="date" id="input-tanggal" required class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50 font-medium">
+                                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Tanggal Sesi</label>
+                                    <input type="date" id="input-tanggal" required class="w-full p-3.5 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50 font-medium">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-600 mb-1.5">Jam</label>
-                                    <input type="time" id="input-jam" required class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50 font-medium">
+                                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Jam</label>
+                                    <input type="time" id="input-jam" required class="w-full p-3.5 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50 font-medium">
                                 </div>
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Target Terapi Sesi Ini</label>
+                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Target Terapi Sesi Ini</label>
                                 <input type="text" id="input-target" placeholder="Contoh: Fokus motorik halus & koordinasi" required 
-                                    class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
+                                    class="w-full p-3.5 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Aktivitas / Intervensi yang Dilakukan</label>
-                                <textarea id="input-aktivitas" rows="2" placeholder="Deskripsikan kegiatan..." required 
-                                    class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none resize-none bg-slate-50/50"></textarea>
+                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Aktivitas / Intervensi yang Dilakukan</label>
+                                <textarea id="input-aktivitas" rows="3" placeholder="Deskripsikan kegiatan..." required 
+                                    class="w-full p-3.5 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none resize-none bg-slate-50/50"></textarea>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-3">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-600 mb-1.5">Kondisi Sebelum Terapi</label>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Kondisi Sebelum Terapi</label>
                                     <input type="text" id="input-kondisi-sebelum" placeholder="Misal: Cemas, kurang fokus" required 
-                                        class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
+                                        class="w-full p-3.5 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-600 mb-1.5">Kondisi Sesudah Terapi</label>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Kondisi Sesudah Terapi</label>
                                     <input type="text" id="input-kondisi-sesudah" placeholder="Misal: Lebih tenang, kooperatif" required 
-                                        class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
+                                        class="w-full p-3.5 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
                                 </div>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-3">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-600 mb-1.5">Respons Klien</label>
-                                    <select id="input-respons" class="w-full p-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium">
+                                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Respons Klien</label>
+                                    <select id="input-respons" class="w-full p-3.5 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium">
                                         <option>Sangat Baik</option>
                                         <option>Baik</option>
                                         <option>Cukup</option>
@@ -159,31 +180,31 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-600 mb-1.5">Skor Progres (0-100)</label>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Skor Progres (0-100)</label>
                                     <input type="number" id="input-progress" min="0" max="100" placeholder="75" required 
-                                        class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50 font-bold text-emerald-600">
+                                        class="w-full p-3.5 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50 font-bold text-emerald-600">
                                 </div>
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Kendala / Temuan (Opsional)</label>
+                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Kendala / Temuan (Opsional)</label>
                                 <input type="text" id="input-kendala" placeholder="Misal: Klien sempat rewel di awal..." 
-                                    class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
+                                    class="w-full p-3.5 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Rencana Sesi Berikutnya</label>
+                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Rencana Sesi Berikutnya</label>
                                 <input type="text" id="input-rencana" placeholder="Langkah lanjutan..." 
-                                    class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
+                                    class="w-full p-3.5 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Catatan Tambahan</label>
+                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Catatan Tambahan</label>
                                 <input type="text" id="input-catatan" placeholder="Catatan khusus untuk supervisor/admin..." 
-                                    class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
+                                    class="w-full p-3.5 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
                             </div>
 
-                            <button type="submit" id="btn-submit-sesi" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold py-3.5 rounded-2xl transition shadow-lg shadow-emerald-200 text-xs tracking-wider uppercase">
+                            <button type="submit" id="btn-submit-sesi" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold py-4 rounded-2xl transition shadow-lg shadow-emerald-200 text-xs tracking-wider uppercase mt-4">
                                 💾 Simpan Sesi (Audit Trail Otomatis)
                             </button>
                         </form>
@@ -191,93 +212,93 @@
                 </div>
 
                 <!-- Tab Riwayat -->
-                <div id="content-riwayat" class="hidden space-y-3">
-                    <div class="flex justify-between items-center mb-2 px-1">
-                        <h3 class="text-xs font-extrabold uppercase tracking-widest text-slate-600">Riwayat Sesi Terapi</h3>
-                        <span id="riwayat-count" class="text-[10px] bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full font-bold">0 Sesi</span>
+                <div id="content-riwayat" class="hidden space-y-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-sm font-extrabold uppercase tracking-widest text-slate-700">Riwayat Sesi Terapi Klien</h3>
+                        <span id="riwayat-count" class="text-xs bg-emerald-50 text-emerald-700 px-3.5 py-1.5 rounded-full font-bold border border-emerald-100">0 Sesi</span>
                     </div>
-                    <div id="riwayat-list" class="space-y-3">
+                    <div id="riwayat-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     </div>
                 </div>
 
                 <!-- Tab Progres -->
-                <div id="content-progress" class="hidden space-y-4">
-                    <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
-                        <h3 class="text-xs font-extrabold uppercase tracking-widest text-emerald-600 mb-2">📊 Grafik & Status Progres Klien</h3>
-                        <p class="text-[11px] text-slate-500 mb-4">Pembaruan otomatis skor progres berdasarkan sesi terakhir terapi.</p>
+                <div id="content-progress" class="hidden space-y-6">
+                    <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-200/60">
+                        <h3 class="text-sm font-extrabold uppercase tracking-widest text-emerald-600 mb-2">📊 Grafik & Status Progres Klien</h3>
+                        <p class="text-xs text-slate-500 mb-6">Pembaruan otomatis skor perkembangan klien dari waktu ke waktu.</p>
                         
-                        <div id="progress-charts-container" class="space-y-4">
+                        <div id="progress-charts-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         </div>
                     </div>
                 </div>
 
                 <!-- Tab Kelola Terapis -->
-                <div id="content-terapis" class="hidden space-y-4">
-                    <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
-                        <h3 class="text-xs font-extrabold uppercase tracking-widest text-emerald-600 mb-3 flex items-center gap-2">
-                            <span class="p-2 bg-emerald-50 rounded-xl">👨‍💼</span> Buat Akun Terapis Baru
+                <div id="content-terapis" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200/60 lg:col-span-1 h-fit">
+                        <h3 class="text-xs font-extrabold uppercase tracking-widest text-emerald-600 mb-4 flex items-center gap-2">
+                            <span class="p-2 bg-emerald-50 rounded-xl">👨‍💼</span> Buat Akun Terapis
                         </h3>
-                        <form id="terapis-form" onsubmit="submitAkunTerapis(event)" class="space-y-3.5">
+                        <form id="terapis-form" onsubmit="submitAkunTerapis(event)" class="space-y-4">
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Nama Lengkap & Gelar</label>
-                                <input type="text" id="new-terapis-nama" placeholder="Contoh: Rina Melati, M.Psi" required 
-                                    class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
+                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Nama Lengkap & Gelar</label>
+                                <input type="text" id="new-terapis-nama" placeholder="Rina Melati, M.Psi" required 
+                                    class="w-full p-3.5 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Email Akun Terapis</label>
-                                <input type="email" id="new-terapis-email" placeholder="rina.terapis@hyui.com" required 
-                                    class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
+                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Email Terapis</label>
+                                <input type="email" id="new-terapis-email" placeholder="rina@hyui.com" required 
+                                    class="w-full p-3.5 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Password Sementara</label>
+                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Password</label>
                                 <input type="password" id="new-terapis-pass" placeholder="••••••••" required 
-                                    class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
+                                    class="w-full p-3.5 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
                             </div>
-                            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-2xl transition text-xs uppercase tracking-wider shadow-lg shadow-emerald-100">
-                                Buat Akun Terapis
+                            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-2xl transition text-xs uppercase tracking-wider shadow-lg shadow-emerald-100">
+                                Simpan Akun Baru
                             </button>
                         </form>
                     </div>
 
-                    <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
-                        <h3 class="text-xs font-extrabold uppercase tracking-widest text-slate-700 mb-3">Daftar Terapis Aktif</h3>
-                        <div id="list-terapis-admin" class="space-y-2.5">
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200/60 lg:col-span-2">
+                        <h3 class="text-xs font-extrabold uppercase tracking-widest text-slate-700 mb-4">Daftar Terapis Aktif</h3>
+                        <div id="list-terapis-admin" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         </div>
                     </div>
                 </div>
 
                 <!-- Tab Penugasan Klien -->
-                <div id="content-penugasan" class="hidden space-y-4">
-                    <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
-                        <h3 class="text-xs font-extrabold uppercase tracking-widest text-emerald-600 mb-3 flex items-center gap-2">
-                            <span class="p-2 bg-emerald-50 rounded-xl">👥</span> Penugasan Klien ke Terapis
+                <div id="content-penugasan" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200/60 lg:col-span-1 h-fit">
+                        <h3 class="text-xs font-extrabold uppercase tracking-widest text-emerald-600 mb-4 flex items-center gap-2">
+                            <span class="p-2 bg-emerald-50 rounded-xl">👥</span> Penugasan Klien
                         </h3>
-                        <form id="penugasan-form" onsubmit="submitPenugasan(event)" class="space-y-3.5">
+                        <form id="penugasan-form" onsubmit="submitPenugasan(event)" class="space-y-4">
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Pilih Klien Binaan</label>
-                                <select id="admin-select-klien" required class="w-full p-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium">
+                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Pilih Klien Binaan</label>
+                                <select id="admin-select-klien" required class="w-full p-3.5 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium">
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Tugaskan ke Terapis</label>
-                                <select id="admin-select-terapis" required class="w-full p-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium">
+                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Tugaskan ke Terapis</label>
+                                <select id="admin-select-terapis" required class="w-full p-3.5 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium">
                                 </select>
                             </div>
-                            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-2xl transition text-xs uppercase tracking-wider shadow-lg shadow-emerald-100">
-                                Perbarui Penugasan Terapis
+                            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-2xl transition text-xs uppercase tracking-wider shadow-lg shadow-emerald-100">
+                                Perbarui Penugasan
                             </button>
                         </form>
                     </div>
 
-                    <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
-                        <h3 class="text-xs font-extrabold uppercase tracking-widest text-slate-700 mb-3">Daftar Penugasan Aktif</h3>
-                        <div id="list-penugasan-admin" class="space-y-2.5">
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200/60 lg:col-span-2">
+                        <h3 class="text-xs font-extrabold uppercase tracking-widest text-slate-700 mb-4">Daftar Penugasan Aktif</h3>
+                        <div id="list-penugasan-admin" class="space-y-3">
                         </div>
                     </div>
                 </div>
 
             </div>
-        </div>
+        </main>
 
     </div>
 
@@ -311,12 +332,6 @@
 
         function closeModal() {
             document.getElementById("custom-modal").classList.add("hidden");
-        }
-
-        function quickLogin(email, password) {
-            document.getElementById("login-email").value = email;
-            document.getElementById("login-password").value = password;
-            document.getElementById("login-form").dispatchEvent(new Event('submit'));
         }
 
         async function handleLogin(e) {
@@ -411,7 +426,7 @@
             tabs.forEach(t => {
                 const btn = document.createElement("button");
                 btn.id = `tab-btn-${t.id}`;
-                btn.className = "px-4 py-2 rounded-2xl transition font-bold text-slate-500 hover:bg-slate-100 text-xs shrink-0";
+                btn.className = "w-full text-left px-4 py-3 rounded-2xl transition font-bold text-slate-600 hover:bg-slate-100 text-xs flex items-center gap-2";
                 btn.textContent = t.label;
                 btn.onclick = () => switchTab(t.id);
                 nav.appendChild(btn);
@@ -423,13 +438,13 @@
                 const el = document.getElementById(`content-${id}`);
                 const btn = document.getElementById(`tab-btn-${id}`);
                 if (el) el.classList.add("hidden");
-                if (btn) btn.className = "px-4 py-2 rounded-2xl transition font-bold text-slate-500 hover:bg-slate-100 text-xs shrink-0";
+                if (btn) btn.className = "w-full text-left px-4 py-3 rounded-2xl transition font-bold text-slate-600 hover:bg-slate-100 text-xs flex items-center gap-2";
             });
 
             const targetEl = document.getElementById(`content-${tabId}`);
             const targetBtn = document.getElementById(`tab-btn-${tabId}`);
             if (targetEl) targetEl.classList.remove("hidden");
-            if (targetBtn) targetBtn.className = "px-4 py-2 rounded-2xl transition font-extrabold bg-emerald-50 text-emerald-600 shadow-sm text-xs shrink-0";
+            if (targetBtn) targetBtn.className = "w-full text-left px-4 py-3 rounded-2xl transition font-extrabold bg-emerald-50 text-emerald-700 shadow-xs text-xs flex items-center gap-2";
 
             if (tabId === 'riwayat') loadRiwayatSesi();
             if (tabId === 'progress') loadProgressCharts();
@@ -538,17 +553,17 @@
             listEl.innerHTML = "";
 
             if (sesiList.length === 0) {
-                listEl.innerHTML = `<div class="text-center py-12 text-slate-400 text-xs font-medium bg-white rounded-3xl border border-slate-100">Belum ada riwayat sesi tercatat dalam sistem.</div>`;
+                listEl.innerHTML = `<div class="col-span-2 text-center py-12 text-slate-400 text-xs font-medium bg-white rounded-3xl border border-slate-200/60">Belum ada riwayat sesi tercatat dalam sistem.</div>`;
                 return;
             }
 
             sesiList.forEach(s => {
                 const card = document.createElement("div");
-                card.className = "bg-white p-4 sm:p-5 rounded-3xl border border-slate-100 shadow-sm space-y-3 text-xs transition hover:shadow-md";
+                card.className = "bg-white p-5 rounded-3xl border border-slate-200/60 shadow-sm space-y-3 text-xs transition hover:shadow-md";
                 card.innerHTML = `
                     <div class="flex justify-between items-start border-b border-slate-100 pb-3">
                         <div>
-                            <span class="font-extrabold text-emerald-600 text-sm sm:text-base">${s.namaKlien}</span>
+                            <span class="font-extrabold text-emerald-600 text-sm">${s.namaKlien}</span>
                             <div class="text-[11px] text-slate-400 mt-0.5 font-medium">📅 ${s.tanggal} | ⏰ ${s.jam}</div>
                         </div>
                         <span class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full font-bold text-[11px] border border-emerald-100">Progres ${s.progress}%</span>
@@ -593,7 +608,7 @@
             container.innerHTML = "";
 
             if (klienList.length === 0) {
-                container.innerHTML = `<div class="text-center py-12 text-slate-400 text-xs font-medium">Belum ada klien yang terdaftar.</div>`;
+                container.innerHTML = `<div class="col-span-2 text-center py-12 text-slate-400 text-xs font-medium">Belum ada klien yang terdaftar.</div>`;
                 return;
             }
 
@@ -620,14 +635,14 @@
                 }
 
                 const box = document.createElement("div");
-                box.className = "bg-slate-50/80 p-4 sm:p-5 rounded-3xl border border-slate-200/60 space-y-3";
+                box.className = "bg-slate-50/80 p-5 rounded-3xl border border-slate-200/60 space-y-3";
                 box.innerHTML = `
                     <div class="flex justify-between items-center">
                         <div>
-                            <h4 class="font-extrabold text-slate-900 text-sm sm:text-base">👤 ${k.nama}</h4>
+                            <h4 class="font-extrabold text-slate-900 text-sm">👤 ${k.nama}</h4>
                             <span class="text-[11px] text-slate-500 font-medium">${k.jenisTerapi} • Terapis: ${k.terapisEmail}</span>
                         </div>
-                        <span class="text-xs bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-2xl font-extrabold shadow-sm">Skor Terkini: ${k.progressTerakhir}%</span>
+                        <span class="text-xs bg-emerald-100 text-emerald-700 px-3 py-1 rounded-2xl font-extrabold shadow-sm">Skor Terkini: ${k.progressTerakhir}%</span>
                     </div>
                     <div class="space-y-3 pt-3 border-t border-slate-200/60">
                         ${barsHtml}
@@ -652,7 +667,7 @@
                                 <span class="font-extrabold text-slate-900 text-sm">${t.nama}</span>
                                 <div class="text-[11px] text-slate-400 font-medium">${t.email}</div>
                             </div>
-                            <span class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-xl font-bold text-[10px] border border-emerald-100">Terapis Aktif</span>
+                            <span class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-xl font-bold text-[10px] border border-emerald-100">Aktif</span>
                         </div>
                     `;
                 });
