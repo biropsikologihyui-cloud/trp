@@ -5,145 +5,153 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Monitoring Terapi - Biro Psikologi Hyui</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        ::-webkit-scrollbar-track { background: #f0fdf4; }
+        ::-webkit-scrollbar-thumb { background: #86efac; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4ade80; }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col items-center justify-center p-2 sm:p-4">
+<body class="bg-gradient-to-br from-emerald-50 via-slate-50 to-teal-50 text-slate-800 min-h-screen flex flex-col items-center justify-center p-2 sm:p-6">
 
-    <div id="custom-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center space-y-4">
-            <div id="modal-icon" class="text-3xl">✨</div>
-            <h3 id="modal-title" class="font-bold text-slate-900 text-base">Notifikasi Sistem</h3>
+    <!-- Modal Notifikasi -->
+    <div id="custom-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl text-center space-y-4 border border-slate-100 transform transition-all">
+            <div id="modal-icon" class="text-4xl">✨</div>
+            <h3 id="modal-title" class="font-bold text-slate-900 text-lg">Notifikasi Sistem</h3>
             <p id="modal-message" class="text-xs text-slate-600 leading-relaxed">Pesan sistem...</p>
-            <button onclick="closeModal()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl text-xs transition">Mengerti</button>
+            <button onclick="closeModal()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-2xl text-xs transition shadow-lg shadow-emerald-200">Mengerti</button>
         </div>
     </div>
 
-    <div id="app" class="w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden flex flex-col min-h-[650px] max-h-[92vh]">
+    <!-- Container Utama (Responsif HP & Web) -->
+    <div id="app" class="w-full max-w-lg bg-white/90 backdrop-blur-xl shadow-2xl rounded-3xl overflow-hidden flex flex-col min-h-[700px] max-h-[94vh] border border-white">
         
-        <div id="login-view" class="flex flex-col flex-grow p-6 justify-center">
+        <!-- Login View -->
+        <div id="login-view" class="flex flex-col flex-grow p-6 sm:p-8 justify-center">
             <div class="text-center mb-8">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl mb-4 text-2xl font-bold shadow-inner">
-                    🧠
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-tr from-emerald-600 to-teal-500 text-white rounded-3xl mb-4 text-3xl shadow-xl shadow-emerald-200">
+                    🌱
                 </div>
-                <h1 class="text-2xl font-bold text-slate-900">Biro Psikologi Hyui</h1>
-                <p class="text-xs text-slate-500 mt-1 uppercase tracking-wider font-medium">Sistem Monitoring Terapi Multi-User</p>
-                <div class="mt-2 inline-flex items-center gap-1.5 text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-full font-semibold">
-                    <span>☁️ Terhubung ke Google Sheets</span>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Biro Psikologi Hyui</h1>
+                <p class="text-xs text-slate-500 mt-1 uppercase tracking-widest font-semibold">Sistem Monitoring Terapi Multi-User</p>
+                <div class="mt-3 inline-flex items-center gap-1.5 text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200/60 px-3 py-1 rounded-full font-bold shadow-sm">
+                    <span class="animate-pulse">☁️</span> Terhubung ke Google Sheets
                 </div>
             </div>
 
             <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-semibold uppercase text-slate-600 mb-1.5">Email Akun</label>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Email Akun</label>
                     <input type="email" id="login-email" required placeholder="Contoh: budi.terapis@hyui.com" 
-                        class="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition bg-slate-50">
+                        class="w-full px-4 py-3.5 border border-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none transition bg-slate-50/50">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold uppercase text-slate-600 mb-1.5">Password</label>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Password</label>
                     <input type="password" id="login-password" required placeholder="••••••••" 
-                        class="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition bg-slate-50">
+                        class="w-full px-4 py-3.5 border border-slate-200 rounded-2xl text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none transition bg-slate-50/50">
                 </div>
                 
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition shadow-lg shadow-indigo-200 text-sm mt-2">
-                    Masuk ke Sistem
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-2xl transition shadow-xl shadow-emerald-200 text-sm mt-2">
+                    Masuk ke Sistem 🚀
                 </button>
             </form>
 
-            <div id="login-error" class="hidden mt-4 p-3 bg-red-50 text-red-600 text-xs rounded-xl text-center font-medium border border-red-100"></div>
+            <div id="login-error" class="hidden mt-4 p-3 bg-red-50 text-red-600 text-xs rounded-2xl text-center font-bold border border-red-100"></div>
 
             <div class="mt-8 pt-6 border-t border-slate-100 text-center">
-                <p class="text-xs text-slate-400 mb-3 font-medium">Coba Akses Cepat Demo Akun:</p>
+                <p class="text-xs text-slate-400 mb-3 font-semibold">⚡ Coba Akses Cepat Demo Akun:</p>
                 <div class="flex flex-wrap gap-2 justify-center">
-                    <button onclick="quickLogin('budi.terapis@hyui.com', '123456')" class="text-xs bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 px-3 py-1.5 rounded-lg border border-slate-200 transition font-medium">Terapis (Budi)</button>
-                    <button onclick="quickLogin('siti.terapis@hyui.com', '123456')" class="text-xs bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 px-3 py-1.5 rounded-lg border border-slate-200 transition font-medium">Terapis (Siti)</button>
-                    <button onclick="quickLogin('admin@hyui.com', '123456')" class="text-xs bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 px-3 py-1.5 rounded-lg border border-slate-200 transition font-medium">Admin</button>
-                    <button onclick="quickLogin('supervisor@hyui.com', '123456')" class="text-xs bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 px-3 py-1.5 rounded-lg border border-slate-200 transition font-medium">Supervisor</button>
+                    <button onclick="quickLogin('budi.terapis@hyui.com', '123456')" class="text-xs bg-slate-100 hover:bg-emerald-600 hover:text-white px-3.5 py-2 rounded-xl border border-slate-200/80 transition font-semibold">Terapis (Budi)</button>
+                    <button onclick="quickLogin('siti.terapis@hyui.com', '123456')" class="text-xs bg-slate-100 hover:bg-emerald-600 hover:text-white px-3.5 py-2 rounded-xl border border-slate-200/80 transition font-semibold">Terapis (Siti)</button>
+                    <button onclick="quickLogin('admin@hyui.com', '123456')" class="text-xs bg-slate-100 hover:bg-emerald-600 hover:text-white px-3.5 py-2 rounded-xl border border-slate-200/80 transition font-semibold">Admin</button>
+                    <button onclick="quickLogin('supervisor@hyui.com', '123456')" class="text-xs bg-slate-100 hover:bg-emerald-600 hover:text-white px-3.5 py-2 rounded-xl border border-slate-200/80 transition font-semibold">Supervisor</button>
                 </div>
             </div>
         </div>
 
+        <!-- Dashboard View -->
         <div id="dashboard-view" class="hidden flex flex-col flex-grow overflow-hidden">
             
-            <header class="bg-indigo-600 text-white p-4 flex justify-between items-center shadow-md shrink-0">
+            <!-- Header Dashboard -->
+            <header class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white p-4 sm:p-5 flex justify-between items-center shadow-lg shrink-0">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-indigo-500 rounded-xl flex items-center justify-center font-bold text-lg shadow-inner" id="user-avatar">
+                    <div class="w-11 h-11 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center font-bold text-lg shadow-inner" id="user-avatar">
                         B
                     </div>
                     <div>
-                        <h2 id="user-display-name" class="font-bold text-sm leading-tight">Nama Pengguna</h2>
-                        <span id="user-display-role" class="text-[10px] bg-indigo-700 text-indigo-100 px-2 py-0.5 rounded-full font-semibold uppercase tracking-wider">Peran</span>
+                        <h2 id="user-display-name" class="font-bold text-sm sm:text-base leading-tight">Nama Pengguna</h2>
+                        <span id="user-display-role" class="text-[10px] bg-white/20 backdrop-blur-md text-white px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">Peran</span>
                     </div>
                 </div>
-                <button onclick="handleLogout()" class="bg-indigo-700 hover:bg-indigo-800 text-indigo-100 px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1">
+                <button onclick="handleLogout()" class="bg-red-500/20 hover:bg-red-500 text-white border border-white/20 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
                     Keluar 🚪
                 </button>
             </header>
 
-            <nav id="nav-tabs" class="bg-white border-b border-slate-100 px-4 py-2 flex gap-2 overflow-x-auto text-xs font-semibold shrink-0">
+            <!-- Navigasi Tab -->
+            <nav id="nav-tabs" class="bg-white border-b border-slate-100 px-4 py-3 flex gap-2 overflow-x-auto text-xs font-bold shrink-0 shadow-sm">
             </nav>
 
-            <div class="flex-grow overflow-y-auto p-4 bg-slate-50 relative">
+            <!-- Konten Utama Dashboard -->
+            <div class="flex-grow overflow-y-auto p-4 sm:p-6 bg-slate-50/50 relative">
                 
+                <!-- Tab Input Sesi -->
                 <div id="content-input" class="space-y-4">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-3 flex items-center gap-1">
-                            <span>📝</span> Form Pencatatan Sesi Terapi Baru
+                    <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
+                        <h3 class="text-xs font-extrabold uppercase tracking-widest text-emerald-600 mb-4 flex items-center gap-2">
+                            <span class="p-2 bg-emerald-50 rounded-xl">📝</span> Form Pencatatan Sesi Terapi Baru
                         </h3>
                         
-                        <form id="sesi-form" onsubmit="submitSesi(event)" class="space-y-3">
+                        <form id="sesi-form" onsubmit="submitSesi(event)" class="space-y-3.5">
                             <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1">Klien Binaan (Ditugaskan Admin)</label>
-                                <select id="select-klien" required class="w-full p-2.5 border border-slate-200 rounded-xl text-xs bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Klien Binaan (Ditugaskan Admin)</label>
+                                <select id="select-klien" required class="w-full p-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium">
                                 </select>
                             </div>
 
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-600 mb-1">Tanggal Sesi</label>
-                                    <input type="date" id="input-tanggal" required class="w-full p-2 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
+                                    <label class="block text-xs font-bold text-slate-600 mb-1.5">Tanggal Sesi</label>
+                                    <input type="date" id="input-tanggal" required class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50 font-medium">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-600 mb-1">Jam</label>
-                                    <input type="time" id="input-jam" required class="w-full p-2 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
+                                    <label class="block text-xs font-bold text-slate-600 mb-1.5">Jam</label>
+                                    <input type="time" id="input-jam" required class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50 font-medium">
                                 </div>
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1">Target Terapi Sesi Ini</label>
+                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Target Terapi Sesi Ini</label>
                                 <input type="text" id="input-target" placeholder="Contoh: Fokus motorik halus & koordinasi" required 
-                                    class="w-full p-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                    class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1">Aktivitas / Intervensi yang Dilakukan</label>
+                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Aktivitas / Intervensi yang Dilakukan</label>
                                 <textarea id="input-aktivitas" rows="2" placeholder="Deskripsikan kegiatan..." required 
-                                    class="w-full p-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none resize-none"></textarea>
+                                    class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none resize-none bg-slate-50/50"></textarea>
                             </div>
 
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-600 mb-1">Kondisi Sebelum Terapi</label>
+                                    <label class="block text-xs font-bold text-slate-600 mb-1.5">Kondisi Sebelum Terapi</label>
                                     <input type="text" id="input-kondisi-sebelum" placeholder="Misal: Cemas, kurang fokus" required 
-                                        class="w-full p-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                        class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-600 mb-1">Kondisi Sesudah Terapi</label>
+                                    <label class="block text-xs font-bold text-slate-600 mb-1.5">Kondisi Sesudah Terapi</label>
                                     <input type="text" id="input-kondisi-sesudah" placeholder="Misal: Lebih tenang, kooperatif" required 
-                                        class="w-full p-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                        class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-600 mb-1">Respons Klien</label>
-                                    <select id="input-respons" class="w-full p-2.5 border border-slate-200 rounded-xl text-xs bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                    <label class="block text-xs font-bold text-slate-600 mb-1.5">Respons Klien</label>
+                                    <select id="input-respons" class="w-full p-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium">
                                         <option>Sangat Baik</option>
                                         <option>Baik</option>
                                         <option>Cukup</option>
@@ -151,49 +159,51 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-600 mb-1">Skor Progres (0-100)</label>
+                                    <label class="block text-xs font-bold text-slate-600 mb-1.5">Skor Progres (0-100)</label>
                                     <input type="number" id="input-progress" min="0" max="100" placeholder="75" required 
-                                        class="w-full p-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                        class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50 font-bold text-emerald-600">
                                 </div>
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1">Kendala / Temuan (Opsional)</label>
+                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Kendala / Temuan (Opsional)</label>
                                 <input type="text" id="input-kendala" placeholder="Misal: Klien sempat rewel di awal..." 
-                                    class="w-full p-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                    class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1">Rencana Sesi Berikutnya</label>
+                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Rencana Sesi Berikutnya</label>
                                 <input type="text" id="input-rencana" placeholder="Langkah lanjutan..." 
-                                    class="w-full p-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                    class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1">Catatan Tambahan</label>
+                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Catatan Tambahan</label>
                                 <input type="text" id="input-catatan" placeholder="Catatan khusus untuk supervisor/admin..." 
-                                    class="w-full p-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                    class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
                             </div>
 
-                            <button type="submit" id="btn-submit-sesi" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-indigo-100 text-xs tracking-wider uppercase">
+                            <button type="submit" id="btn-submit-sesi" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold py-3.5 rounded-2xl transition shadow-lg shadow-emerald-200 text-xs tracking-wider uppercase">
                                 💾 Simpan Sesi (Audit Trail Otomatis)
                             </button>
                         </form>
                     </div>
                 </div>
 
+                <!-- Tab Riwayat -->
                 <div id="content-riwayat" class="hidden space-y-3">
-                    <div class="flex justify-between items-center mb-2">
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-600">Riwayat Sesi Terapi</h3>
-                        <span id="riwayat-count" class="text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full font-bold">0 Sesi</span>
+                    <div class="flex justify-between items-center mb-2 px-1">
+                        <h3 class="text-xs font-extrabold uppercase tracking-widest text-slate-600">Riwayat Sesi Terapi</h3>
+                        <span id="riwayat-count" class="text-[10px] bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full font-bold">0 Sesi</span>
                     </div>
                     <div id="riwayat-list" class="space-y-3">
                     </div>
                 </div>
 
+                <!-- Tab Progres -->
                 <div id="content-progress" class="hidden space-y-4">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-2">📊 Grafik & Status Progres Klien</h3>
+                    <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
+                        <h3 class="text-xs font-extrabold uppercase tracking-widest text-emerald-600 mb-2">📊 Grafik & Status Progres Klien</h3>
                         <p class="text-[11px] text-slate-500 mb-4">Pembaruan otomatis skor progres berdasarkan sesi terakhir terapi.</p>
                         
                         <div id="progress-charts-container" class="space-y-4">
@@ -201,65 +211,67 @@
                     </div>
                 </div>
 
+                <!-- Tab Kelola Terapis -->
                 <div id="content-terapis" class="hidden space-y-4">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-3 flex items-center gap-1">
-                            <span>👨‍💼</span> Buat Akun Terapis Baru
+                    <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
+                        <h3 class="text-xs font-extrabold uppercase tracking-widest text-emerald-600 mb-3 flex items-center gap-2">
+                            <span class="p-2 bg-emerald-50 rounded-xl">👨‍💼</span> Buat Akun Terapis Baru
                         </h3>
-                        <form id="terapis-form" onsubmit="submitAkunTerapis(event)" class="space-y-3">
+                        <form id="terapis-form" onsubmit="submitAkunTerapis(event)" class="space-y-3.5">
                             <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Lengkap & Gelar</label>
+                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Nama Lengkap & Gelar</label>
                                 <input type="text" id="new-terapis-nama" placeholder="Contoh: Rina Melati, M.Psi" required 
-                                    class="w-full p-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                    class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1">Email Akun Terapis</label>
+                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Email Akun Terapis</label>
                                 <input type="email" id="new-terapis-email" placeholder="rina.terapis@hyui.com" required 
-                                    class="w-full p-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                    class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1">Password Sementara</label>
+                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Password Sementara</label>
                                 <input type="password" id="new-terapis-pass" placeholder="••••••••" required 
-                                    class="w-full p-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                    class="w-full p-3 border border-slate-200 rounded-2xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50">
                             </div>
-                            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl transition text-xs uppercase tracking-wider">
+                            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-2xl transition text-xs uppercase tracking-wider shadow-lg shadow-emerald-100">
                                 Buat Akun Terapis
                             </button>
                         </form>
                     </div>
 
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-3">Daftar Terapis Aktif</h3>
-                        <div id="list-terapis-admin" class="space-y-2">
+                    <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
+                        <h3 class="text-xs font-extrabold uppercase tracking-widest text-slate-700 mb-3">Daftar Terapis Aktif</h3>
+                        <div id="list-terapis-admin" class="space-y-2.5">
                         </div>
                     </div>
                 </div>
 
+                <!-- Tab Penugasan Klien -->
                 <div id="content-penugasan" class="hidden space-y-4">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-3 flex items-center gap-1">
-                            <span>👥</span> Penugasan Klien ke Terapis
+                    <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
+                        <h3 class="text-xs font-extrabold uppercase tracking-widest text-emerald-600 mb-3 flex items-center gap-2">
+                            <span class="p-2 bg-emerald-50 rounded-xl">👥</span> Penugasan Klien ke Terapis
                         </h3>
-                        <form id="penugasan-form" onsubmit="submitPenugasan(event)" class="space-y-3">
+                        <form id="penugasan-form" onsubmit="submitPenugasan(event)" class="space-y-3.5">
                             <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1">Pilih Klien Binaan</label>
-                                <select id="admin-select-klien" required class="w-full p-2.5 border border-slate-200 rounded-xl text-xs bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Pilih Klien Binaan</label>
+                                <select id="admin-select-klien" required class="w-full p-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium">
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1">Tugaskan ke Terapis</label>
-                                <select id="admin-select-terapis" required class="w-full p-2.5 border border-slate-200 rounded-xl text-xs bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Tugaskan ke Terapis</label>
+                                <select id="admin-select-terapis" required class="w-full p-3 border border-slate-200 rounded-2xl text-xs bg-slate-50/50 focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium">
                                 </select>
                             </div>
-                            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl transition text-xs uppercase tracking-wider">
+                            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-2xl transition text-xs uppercase tracking-wider shadow-lg shadow-emerald-100">
                                 Perbarui Penugasan Terapis
                             </button>
                         </form>
                     </div>
 
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-3">Daftar Penugasan Aktif</h3>
-                        <div id="list-penugasan-admin" class="space-y-2">
+                    <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
+                        <h3 class="text-xs font-extrabold uppercase tracking-widest text-slate-700 mb-3">Daftar Penugasan Aktif</h3>
+                        <div id="list-penugasan-admin" class="space-y-2.5">
                         </div>
                     </div>
                 </div>
@@ -269,21 +281,19 @@
 
     </div>
 
+    <!-- Script Utama Aplikasi -->
     <script>
-        // URL Apps Script sudah dipatenkan langsung ke Google Sheets Anda
         const DEFAULT_API_URL = "https://script.google.com/macros/s/AKfycbwVeU-9A_8L_60kduKoxWnow1szWceWCw63BVBJrk7w053u4wZ0CAUOL-wiETSl7O-H/exec";
 
         async function callBackend(action, payload = {}) {
             if (!DEFAULT_API_URL) return null;
-
             try {
                 const response = await fetch(DEFAULT_API_URL, {
                     method: "POST",
                     body: JSON.stringify({ action, ...payload }),
                     headers: { "Content-Type": "text/plain;charset=utf-8" }
                 });
-                const result = await response.json();
-                return result;
+                return await response.json();
             } catch (err) {
                 console.error("Gagal terhubung ke Google Apps Script:", err);
                 return { status: "error", message: "Gagal terhubung ke server Google Sheets." };
@@ -382,26 +392,26 @@
         function setupNavigation() {
             const nav = document.getElementById("nav-tabs");
             nav.innerHTML = "";
-
             const tabs = [];
+
             if (currentUser.role === "Terapis") {
                 tabs.push({ id: "input", label: "📝 Input Sesi" });
-                tabs.push({ id: "riwayat", label: "📋 Riwayat Sesi" });
-                tabs.push({ id: "progress", label: "📊 Progres Klien" });
+                tabs.push({ id: "riwayat", label: "📋 Riwayat" });
+                tabs.push({ id: "progress", label: "📊 Progres" });
             } else if (currentUser.role === "Supervisor") {
-                tabs.push({ id: "riwayat", label: "📋 Semua Riwayat" });
+                tabs.push({ id: "riwayat", label: "📋 Riwayat" });
                 tabs.push({ id: "progress", label: "📊 Progres & Grafik" });
             } else if (currentUser.role === "Admin") {
-                tabs.push({ id: "penugasan", label: "👥 Penugasan Klien" });
-                tabs.push({ id: "terapis", label: "👨‍💼 Kelola Terapis" });
-                tabs.push({ id: "riwayat", label: "📋 Riwayat Sesi" });
-                tabs.push({ id: "progress", label: "📊 Progres Klien" });
+                tabs.push({ id: "penugasan", label: "👥 Penugasan" });
+                tabs.push({ id: "terapis", label: "👨‍💼 Terapis" });
+                tabs.push({ id: "riwayat", label: "📋 Riwayat" });
+                tabs.push({ id: "progress", label: "📊 Progres" });
             }
 
             tabs.forEach(t => {
                 const btn = document.createElement("button");
                 btn.id = `tab-btn-${t.id}`;
-                btn.className = "px-3 py-1.5 rounded-xl transition font-medium text-slate-600 hover:bg-slate-100";
+                btn.className = "px-4 py-2 rounded-2xl transition font-bold text-slate-500 hover:bg-slate-100 text-xs shrink-0";
                 btn.textContent = t.label;
                 btn.onclick = () => switchTab(t.id);
                 nav.appendChild(btn);
@@ -413,13 +423,13 @@
                 const el = document.getElementById(`content-${id}`);
                 const btn = document.getElementById(`tab-btn-${id}`);
                 if (el) el.classList.add("hidden");
-                if (btn) btn.className = "px-3 py-1.5 rounded-xl transition font-medium text-slate-600 hover:bg-slate-100";
+                if (btn) btn.className = "px-4 py-2 rounded-2xl transition font-bold text-slate-500 hover:bg-slate-100 text-xs shrink-0";
             });
 
             const targetEl = document.getElementById(`content-${tabId}`);
             const targetBtn = document.getElementById(`tab-btn-${tabId}`);
             if (targetEl) targetEl.classList.remove("hidden");
-            if (targetBtn) targetBtn.className = "px-3 py-1.5 rounded-xl transition font-bold bg-indigo-50 text-indigo-600 shadow-sm";
+            if (targetBtn) targetBtn.className = "px-4 py-2 rounded-2xl transition font-extrabold bg-emerald-50 text-emerald-600 shadow-sm text-xs shrink-0";
 
             if (tabId === 'riwayat') loadRiwayatSesi();
             if (tabId === 'progress') loadProgressCharts();
@@ -453,13 +463,10 @@
             btn.disabled = true;
             btn.textContent = "Menyimpan Sesi ke Google Sheets...";
 
-            const namaKlien = document.getElementById("select-klien").value;
-            const progressValue = parseInt(document.getElementById("input-progress").value);
-
             const sesiDataPayload = {
                 emailTerapis: currentUser.email,
                 namaTerapis: currentUser.nama,
-                namaKlien: namaKlien,
+                namaKlien: document.getElementById("select-klien").value,
                 tanggal: document.getElementById("input-tanggal").value,
                 jam: document.getElementById("input-jam").value,
                 target: document.getElementById("input-target").value,
@@ -467,7 +474,7 @@
                 kondisiSebelum: document.getElementById("input-kondisi-sebelum").value,
                 kondisiSesudah: document.getElementById("input-kondisi-sesudah").value,
                 respons: document.getElementById("input-respons").value,
-                progress: progressValue,
+                progress: parseInt(document.getElementById("input-progress").value),
                 kendala: document.getElementById("input-kendala").value || "-",
                 rencana: document.getElementById("input-rencana").value || "-",
                 catatan: document.getElementById("input-catatan").value || "-"
@@ -480,7 +487,6 @@
                 showModal("Berhasil Disimpan!", "Sesi terapi berhasil direkam dan disinkronkan dengan Google Sheets.", "✅");
                 document.getElementById("sesi-form").reset();
                 document.getElementById("input-tanggal").valueAsDate = new Date();
-                
                 btn.disabled = false;
                 btn.textContent = "💾 Simpan Sesi (Audit Trail Otomatis)";
                 switchTab('riwayat');
@@ -532,40 +538,38 @@
             listEl.innerHTML = "";
 
             if (sesiList.length === 0) {
-                listEl.innerHTML = `<div class="text-center py-8 text-slate-400 text-xs">Belum ada riwayat sesi tercatat dalam sistem.</div>`;
+                listEl.innerHTML = `<div class="text-center py-12 text-slate-400 text-xs font-medium bg-white rounded-3xl border border-slate-100">Belum ada riwayat sesi tercatat dalam sistem.</div>`;
                 return;
             }
 
             sesiList.forEach(s => {
                 const card = document.createElement("div");
-                card.className = "bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm space-y-2 text-xs";
+                card.className = "bg-white p-4 sm:p-5 rounded-3xl border border-slate-100 shadow-sm space-y-3 text-xs transition hover:shadow-md";
                 card.innerHTML = `
-                    <div class="flex justify-between items-start border-b border-slate-100 pb-2">
+                    <div class="flex justify-between items-start border-b border-slate-100 pb-3">
                         <div>
-                            <span class="font-bold text-indigo-600 text-sm">${s.namaKlien}</span>
-                            <div class="text-[10px] text-slate-400">📅 ${s.tanggal} | ⏰ ${s.jam}</div>
+                            <span class="font-extrabold text-emerald-600 text-sm sm:text-base">${s.namaKlien}</span>
+                            <div class="text-[11px] text-slate-400 mt-0.5 font-medium">📅 ${s.tanggal} | ⏰ ${s.jam}</div>
                         </div>
-                        <span class="bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full font-bold text-[10px]">Skor Progres ${s.progress}%</span>
+                        <span class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full font-bold text-[11px] border border-emerald-100">Progres ${s.progress}%</span>
                     </div>
-                    <div class="grid grid-cols-2 gap-2 bg-slate-50 p-2 rounded-lg text-[11px]">
-                        <div><strong class="text-slate-500">Sebelum:</strong> ${s.kondisiSebelum}</div>
-                        <div><strong class="text-slate-500">Sesudah:</strong> ${s.kondisiSesudah}</div>
+                    <div class="grid grid-cols-2 gap-2 bg-slate-50 p-3 rounded-2xl text-[11px]">
+                        <div><strong class="text-slate-500 block mb-0.5">Sebelum:</strong> <span class="font-medium text-slate-700">${s.kondisiSebelum}</span></div>
+                        <div><strong class="text-slate-500 block mb-0.5">Sesudah:</strong> <span class="font-medium text-slate-700">${s.kondisiSesudah}</span></div>
                     </div>
-                    <div>
-                        <span class="font-semibold text-slate-700">Target:</span> <span class="text-slate-600">${s.target}</span>
+                    <div class="space-y-1">
+                        <div><strong class="text-slate-700">Target:</strong> <span class="text-slate-600">${s.target}</span></div>
+                        <div><strong class="text-slate-700">Aktivitas:</strong> <span class="text-slate-600">${s.aktivitas}</span></div>
                     </div>
-                    <div>
-                        <span class="font-semibold text-slate-700">Aktivitas:</span> <span class="text-slate-600">${s.aktivitas}</span>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2 text-[11px]">
-                        <div><strong class="text-slate-500">Respons:</strong> ${s.respons}</div>
-                        <div><strong class="text-slate-500">Kendala:</strong> ${s.kendala}</div>
+                    <div class="grid grid-cols-2 gap-2 text-[11px] pt-1">
+                        <div><strong class="text-slate-500">Respons:</strong> <span class="font-medium text-slate-700">${s.respons}</span></div>
+                        <div><strong class="text-slate-500">Kendala:</strong> <span class="font-medium text-slate-700">${s.kendala}</span></div>
                     </div>
                     <div>
-                        <strong class="text-slate-500">Rencana Berikutnya:</strong> <span class="text-slate-600">${s.rencana}</span>
+                        <strong class="text-slate-700">Rencana Berikutnya:</strong> <span class="text-slate-600">${s.rencana}</span>
                     </div>
-                    ${s.catatan !== '-' ? `<div><strong class="text-slate-500">Catatan:</strong> <span class="text-slate-600">${s.catatan}</span></div>` : ''}
-                    <div class="text-[10px] text-slate-400 pt-1 flex justify-between items-center border-t border-slate-100">
+                    ${s.catatan !== '-' ? `<div><strong class="text-slate-700">Catatan:</strong> <span class="text-slate-600">${s.catatan}</span></div>` : ''}
+                    <div class="text-[10px] text-slate-400 pt-2 flex justify-between items-center border-t border-slate-100 font-medium">
                         <span>👨‍⚕️ Terapis: ${s.namaTerapis || s.emailTerapis}</span>
                         <span>🕒 Input: ${s.timestamp}</span>
                     </div>
@@ -589,7 +593,7 @@
             container.innerHTML = "";
 
             if (klienList.length === 0) {
-                container.innerHTML = `<div class="text-center py-8 text-slate-400 text-xs">Belum ada klien yang terdaftar.</div>`;
+                container.innerHTML = `<div class="text-center py-12 text-slate-400 text-xs font-medium">Belum ada klien yang terdaftar.</div>`;
                 return;
             }
 
@@ -598,17 +602,17 @@
 
                 let barsHtml = '';
                 if (sessions.length === 0) {
-                    barsHtml = `<div class="text-[11px] text-slate-400 italic">Belum ada sesi terapi yang diselesaikan untuk klien ini.</div>`;
+                    barsHtml = `<div class="text-[11px] text-slate-400 italic py-2">Belum ada sesi terapi yang diselesaikan untuk klien ini.</div>`;
                 } else {
                     sessions.forEach((s, idx) => {
                         barsHtml += `
-                            <div class="space-y-1">
-                                <div class="flex justify-between text-[11px]">
-                                    <span class="font-medium text-slate-700">Sesi ${idx + 1} (${s.tanggal})</span>
-                                    <span class="font-bold text-indigo-600">${s.progress}%</span>
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between text-xs">
+                                    <span class="font-bold text-slate-700">Sesi ${idx + 1} <span class="text-[10px] font-normal text-slate-400">(${s.tanggal})</span></span>
+                                    <span class="font-extrabold text-emerald-600">${s.progress}%</span>
                                 </div>
-                                <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-                                    <div class="bg-indigo-600 h-2.5 rounded-full transition-all duration-500" style="width: ${s.progress}%"></div>
+                                <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden p-0.5 border border-slate-200/50">
+                                    <div class="bg-gradient-to-r from-emerald-500 to-teal-600 h-full rounded-full transition-all duration-500" style="width: ${s.progress}%"></div>
                                 </div>
                             </div>
                         `;
@@ -616,16 +620,16 @@
                 }
 
                 const box = document.createElement("div");
-                box.className = "bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-3";
+                box.className = "bg-slate-50/80 p-4 sm:p-5 rounded-3xl border border-slate-200/60 space-y-3";
                 box.innerHTML = `
                     <div class="flex justify-between items-center">
                         <div>
-                            <h4 class="font-bold text-slate-800 text-sm">👤 ${k.nama}</h4>
-                            <span class="text-[10px] text-slate-500">${k.jenisTerapi} | Terapis: ${k.terapisEmail}</span>
+                            <h4 class="font-extrabold text-slate-900 text-sm sm:text-base">👤 ${k.nama}</h4>
+                            <span class="text-[11px] text-slate-500 font-medium">${k.jenisTerapi} • Terapis: ${k.terapisEmail}</span>
                         </div>
-                        <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-lg font-bold">Skor Terkini: ${k.progressTerakhir}%</span>
+                        <span class="text-xs bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-2xl font-extrabold shadow-sm">Skor Terkini: ${k.progressTerakhir}%</span>
                     </div>
-                    <div class="space-y-2.5 pt-1 border-t border-slate-200/60 pt-3">
+                    <div class="space-y-3 pt-3 border-t border-slate-200/60">
                         ${barsHtml}
                     </div>
                 `;
@@ -643,12 +647,12 @@
                 listTerapisEl.innerHTML = "";
                 terapisList.forEach(t => {
                     listTerapisEl.innerHTML += `
-                        <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex justify-between items-center text-xs">
+                        <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/60 flex justify-between items-center text-xs">
                             <div>
-                                <span class="font-bold text-slate-800">${t.nama}</span>
-                                <div class="text-[10px] text-slate-400">${t.email}</div>
+                                <span class="font-extrabold text-slate-900 text-sm">${t.nama}</span>
+                                <div class="text-[11px] text-slate-400 font-medium">${t.email}</div>
                             </div>
-                            <span class="bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded font-semibold text-[10px]">Terapis Aktif</span>
+                            <span class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-xl font-bold text-[10px] border border-emerald-100">Terapis Aktif</span>
                         </div>
                     `;
                 });
@@ -672,12 +676,12 @@
                 listPenugasan.innerHTML = "";
                 klienList.forEach(k => {
                     listPenugasan.innerHTML += `
-                        <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex justify-between items-center text-xs">
+                        <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/60 flex justify-between items-center text-xs">
                             <div>
-                                <span class="font-bold text-slate-800">${k.nama}</span>
-                                <div class="text-[10px] text-slate-500">Jenis: ${k.jenisTerapi}</div>
+                                <span class="font-extrabold text-slate-900 text-sm">${k.nama}</span>
+                                <div class="text-[11px] text-slate-500 font-medium">Jenis: ${k.jenisTerapi}</div>
                             </div>
-                            <span class="bg-indigo-100 text-indigo-700 px-2.5 py-1 rounded-lg font-semibold text-[10px]">Terapis: ${k.terapisEmail}</span>
+                            <span class="bg-emerald-100 text-emerald-800 px-3 py-1.5 rounded-xl font-bold text-[11px] shadow-sm">Terapis: ${k.terapisEmail}</span>
                         </div>
                     `;
                 });
