@@ -16,7 +16,6 @@
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col items-center justify-center p-2 sm:p-4">
 
-    <!-- Custom Modal Pengganti Alert -->
     <div id="custom-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center space-y-4">
             <div id="modal-icon" class="text-3xl">✨</div>
@@ -28,7 +27,6 @@
 
     <div id="app" class="w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden flex flex-col min-h-[650px] max-h-[92vh]">
         
-        <!-- ==================== HALAMAN LOGIN ==================== -->
         <div id="login-view" class="flex flex-col flex-grow p-6 justify-center">
             <div class="text-center mb-8">
                 <div class="inline-flex items-center justify-center w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl mb-4 text-2xl font-bold shadow-inner">
@@ -55,9 +53,25 @@
                 </button>
             </form>
 
+            <div class="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs space-y-2">
+                <div class="font-bold text-amber-800 flex items-center justify-between">
+                    <span>🔗 URL Backend Apps Script</span>
+                    <span id="sync-status" class="text-[10px] bg-amber-200 text-amber-900 px-2 py-0.5 rounded font-normal">Mode Lokal / Demo</span>
+                </div>
+                <div class="flex gap-2">
+                    <input type="text" id="api-url-input" placeholder="Tempel URL Web App (/exec) di sini..." 
+                        class="w-full p-2 border border-amber-300 rounded-lg bg-white text-[11px] focus:outline-none focus:ring-2 focus:ring-amber-500">
+                    <button onclick="saveApiUrl()" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-3 py-2 rounded-lg text-[11px] shrink-0 transition">
+                        Simpan
+                    </button>
+                </div>
+                <p class="text-[10px] text-amber-700 leading-tight">
+                    Jika dikosongkan, aplikasi berjalan menggunakan memori browser lokal (LocalStorage). Jika diisi, data otomatis tersimpan & tersinkron ke Google Sheets!
+                </p>
+            </div>
+
             <div id="login-error" class="hidden mt-4 p-3 bg-red-50 text-red-600 text-xs rounded-xl text-center font-medium border border-red-100"></div>
 
-            <!-- Akses Cepat Demo Akun -->
             <div class="mt-8 pt-6 border-t border-slate-100 text-center">
                 <p class="text-xs text-slate-400 mb-3 font-medium">Coba Akses Cepat Demo Akun:</p>
                 <div class="flex flex-wrap gap-2 justify-center">
@@ -69,10 +83,8 @@
             </div>
         </div>
 
-        <!-- ==================== HALAMAN DASHBOARD & APLIKASI ==================== -->
         <div id="dashboard-view" class="hidden flex flex-col flex-grow overflow-hidden">
             
-            <!-- Navbar Header -->
             <header class="bg-indigo-600 text-white p-4 flex justify-between items-center shadow-md shrink-0">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 bg-indigo-500 rounded-xl flex items-center justify-center font-bold text-lg shadow-inner" id="user-avatar">
@@ -88,15 +100,11 @@
                 </button>
             </header>
 
-            <!-- Navigasi Menu Multi-Tab -->
             <nav id="nav-tabs" class="bg-white border-b border-slate-100 px-4 py-2 flex gap-2 overflow-x-auto text-xs font-semibold shrink-0">
-                <!-- Dirender dinamis berdasarkan role -->
             </nav>
 
-            <!-- Area Konten Utama Tab -->
             <div class="flex-grow overflow-y-auto p-4 bg-slate-50 relative">
                 
-                <!-- TAB 1: INPUT SESI TERAPI (KHUSUS TERAPIS) -->
                 <div id="content-input" class="space-y-4">
                     <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-3 flex items-center gap-1">
@@ -107,7 +115,6 @@
                             <div>
                                 <label class="block text-xs font-semibold text-slate-600 mb-1">Klien Binaan (Ditugaskan Admin)</label>
                                 <select id="select-klien" required class="w-full p-2.5 border border-slate-200 rounded-xl text-xs bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                                    <!-- Diisi secara dinamis -->
                                 </select>
                             </div>
 
@@ -189,30 +196,25 @@
                     </div>
                 </div>
 
-                <!-- TAB 2: RIWAYAT SESI -->
                 <div id="content-riwayat" class="hidden space-y-3">
                     <div class="flex justify-between items-center mb-2">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-slate-600">Riwayat Sesi Terapi</h3>
                         <span id="riwayat-count" class="text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full font-bold">0 Sesi</span>
                     </div>
                     <div id="riwayat-list" class="space-y-3">
-                        <!-- Data riwayat masuk disini -->
                     </div>
                 </div>
 
-                <!-- TAB 3: PROGRES KLIEN -->
                 <div id="content-progress" class="hidden space-y-4">
                     <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-2">📊 Grafik & Status Progres Klien</h3>
                         <p class="text-[11px] text-slate-500 mb-4">Pembaruan otomatis skor progres berdasarkan sesi terakhir terapi.</p>
                         
                         <div id="progress-charts-container" class="space-y-4">
-                            <!-- Grafik per klien dirender disini -->
                         </div>
                     </div>
                 </div>
 
-                <!-- TAB 4: MANAJEMEN AKUN TERAPIS (KHUSUS ADMIN) -->
                 <div id="content-terapis" class="hidden space-y-4">
                     <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-3 flex items-center gap-1">
@@ -243,12 +245,10 @@
                     <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-3">Daftar Terapis Aktif</h3>
                         <div id="list-terapis-admin" class="space-y-2">
-                            <!-- List terapis -->
                         </div>
                     </div>
                 </div>
 
-                <!-- TAB 5: PENUGASAN KLIEN (KHUSUS ADMIN) -->
                 <div id="content-penugasan" class="hidden space-y-4">
                     <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-3 flex items-center gap-1">
@@ -258,13 +258,11 @@
                             <div>
                                 <label class="block text-xs font-semibold text-slate-600 mb-1">Pilih Klien Binaan</label>
                                 <select id="admin-select-klien" required class="w-full p-2.5 border border-slate-200 rounded-xl text-xs bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                                    <!-- Diisi dinamis -->
                                 </select>
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-slate-600 mb-1">Tugaskan ke Terapis</label>
                                 <select id="admin-select-terapis" required class="w-full p-2.5 border border-slate-200 rounded-xl text-xs bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                                    <!-- Diisi dinamis -->
                                 </select>
                             </div>
                             <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl transition text-xs uppercase tracking-wider">
@@ -276,7 +274,6 @@
                     <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-3">Daftar Penugasan Aktif</h3>
                         <div id="list-penugasan-admin" class="space-y-2">
-                            <!-- List penugasan -->
                         </div>
                     </div>
                 </div>
@@ -287,7 +284,58 @@
     </div>
 
     <script>
-        // Database in-memory dengan LocalStorage Persistence
+        const DEFAULT_API_URL = localStorage.getItem("hyui_api_url") || "";
+
+        if (DEFAULT_API_URL) {
+            document.addEventListener("DOMContentLoaded", () => {
+                const inputEl = document.getElementById("api-url-input");
+                if (inputEl) inputEl.value = DEFAULT_API_URL;
+                updateSyncBadge(true);
+            });
+        }
+
+        function saveApiUrl() {
+            const url = document.getElementById("api-url-input").value.trim();
+            localStorage.setItem("hyui_api_url", url);
+            if (url) {
+                showModal("URL Disimpan", "Koneksi ke Google Sheets berhasil diatur! Aplikasi sekarang akan berkomunikasi dengan backend Apps Script.", "🌐");
+                updateSyncBadge(true);
+            } else {
+                showModal("Mode Lokal Aktif", "URL dikosongkan. Aplikasi kembali menggunakan LocalStorage browser.", "💻");
+                updateSyncBadge(false);
+            }
+        }
+
+        function updateSyncBadge(isCloud) {
+            const badge = document.getElementById("sync-status");
+            if (!badge) return;
+            if (isCloud) {
+                badge.className = "text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold";
+                badge.textContent = "Terhubung Google Sheets ☁️";
+            } else {
+                badge.className = "text-[10px] bg-amber-200 text-amber-900 px-2 py-0.5 rounded font-normal";
+                badge.textContent = "Mode Lokal / Demo";
+            }
+        }
+
+        async function callBackend(action, payload = {}) {
+            const apiUrl = localStorage.getItem("hyui_api_url");
+            if (!apiUrl) return null; // Fallback ke LocalStorage jika URL kosong
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    body: JSON.stringify({ action, ...payload }),
+                    headers: { "Content-Type": "text/plain;charset=utf-8" }
+                });
+                const result = await response.json();
+                return result;
+            } catch (err) {
+                console.error("Gagal terhubung ke Google Apps Script:", err);
+                return { status: "error", message: "Gagal terhubung ke server Google Sheets." };
+            }
+        }
+
         if (!localStorage.getItem("hyui_users")) {
             const initialUsers = [
                 { email: "budi.terapis@hyui.com", password: "123456", nama: "Budi Santoso, S.Psi", role: "Terapis" },
@@ -322,11 +370,11 @@
                     aktivitas: "Menggunting kertas pola lurus", 
                     kondisiSebelum: "Cemas & kaku",
                     kondisiSesudah: "Lebih rileks & fokus",
-                    respons: "Sangat Baik", 
-                    progress: 75, 
-                    kendala: "Cepat lelah di akhir sesi", 
-                    rencana: "Evaluasi beban latihan ringan",
-                    catatan: "Perkembangan sangat positif dari minggu lalu"
+                    respons: "Sangat Baik",
+                    progress: 75,
+                    kendala: "-",
+                    rencana: "Lanjutkan pola melengkung",
+                    catatan: "Klien sangat kooperatif"
                 }
             ];
             localStorage.setItem("hyui_sesi_terapi", JSON.stringify(initialSesi));
@@ -348,25 +396,53 @@
         function quickLogin(email, password) {
             document.getElementById("login-email").value = email;
             document.getElementById("login-password").value = password;
-            document.getElementById("login-form").requestSubmit();
+            document.getElementById("login-form").dispatchEvent(new Event('submit'));
         }
 
-        function handleLogin(e) {
+        async function handleLogin(e) {
             e.preventDefault();
             const email = document.getElementById("login-email").value.trim();
             const pass = document.getElementById("login-password").value;
             const errEl = document.getElementById("login-error");
 
-            const users = JSON.parse(localStorage.getItem("hyui_users"));
-            const found = users.find(u => u.email === email && u.password === pass);
-            
-            if (found) {
-                currentUser = found;
-                errEl.classList.add("hidden");
-                initDashboard();
-            } else {
-                errEl.textContent = "Email atau password salah! (Gunakan tombol akses cepat di bawah untuk demo)";
+            const apiUrl = localStorage.getItem("hyui_api_url");
+            if (apiUrl) {
+                // Login via Google Apps Script Backend
+                errEl.textContent = "Menghubungkan ke Google Sheets...";
                 errEl.classList.remove("hidden");
+                const res = await callBackend("login", { email, password: pass });
+                if (res && res.status === "success") {
+                    currentUser = res.user;
+                    errEl.classList.add("hidden");
+                    await fetchDashboardDataFromCloud();
+                    initDashboard();
+                } else {
+                    errEl.textContent = res ? res.message : "Gagal autentikasi.";
+                    errEl.classList.remove("hidden");
+                }
+            } else {
+                // Login via LocalStorage (Demo Mode)
+                const users = JSON.parse(localStorage.getItem("hyui_users"));
+                const found = users.find(u => u.email === email && u.password === pass);
+                
+                if (found) {
+                    currentUser = found;
+                    errEl.classList.add("hidden");
+                    initDashboard();
+                } else {
+                    errEl.textContent = "Email atau password salah! (Gunakan tombol akses cepat di bawah untuk demo)";
+                    errEl.classList.remove("hidden");
+                }
+            }
+        }
+
+        async function fetchDashboardDataFromCloud() {
+            const apiUrl = localStorage.getItem("hyui_api_url");
+            if (!apiUrl) return;
+            const res = await callBackend("get_dashboard_data", { email: currentUser.email, role: currentUser.role });
+            if (res && res.status === "success") {
+                localStorage.setItem("hyui_klien", JSON.stringify(res.klien));
+                localStorage.setItem("hyui_sesi_terapi", JSON.stringify(res.sesi));
             }
         }
 
@@ -385,7 +461,8 @@
             document.getElementById("user-display-role").textContent = currentUser.role;
             document.getElementById("user-avatar").textContent = currentUser.nama.charAt(0);
 
-            document.getElementById("input-tanggal").valueAsDate = new Date();
+            const dateInput = document.getElementById("input-tanggal");
+            if (dateInput) dateInput.valueAsDate = new Date();
 
             setupNavigation();
             loadKlienDropdown();
@@ -400,82 +477,79 @@
             }
         }
 
-        // Setup Navigasi Berdasarkan Role User
         function setupNavigation() {
             const nav = document.getElementById("nav-tabs");
             nav.innerHTML = "";
 
+            const tabs = [];
             if (currentUser.role === "Terapis") {
-                nav.innerHTML = `
-                    <button onclick="switchTab('input')" id="tab-input" class="px-3 py-2 rounded-lg bg-indigo-50 text-indigo-600 whitespace-nowrap transition">➕ Input Sesi</button>
-                    <button onclick="switchTab('riwayat')" id="tab-riwayat" class="px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 whitespace-nowrap transition">📋 Riwayat</button>
-                    <button onclick="switchTab('progress')" id="tab-progress" class="px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 whitespace-nowrap transition">📈 Progres Klien</button>
-                `;
+                tabs.push({ id: "input", label: "📝 Input Sesi" });
+                tabs.push({ id: "riwayat", label: "📋 Riwayat Sesi" });
+                tabs.push({ id: "progress", label: "📊 Progres Klien" });
             } else if (currentUser.role === "Supervisor") {
-                nav.innerHTML = `
-                    <button onclick="switchTab('riwayat')" id="tab-riwayat" class="px-3 py-2 rounded-lg bg-indigo-50 text-indigo-600 whitespace-nowrap transition">📋 Semua Riwayat Sesi</button>
-                    <button onclick="switchTab('progress')" id="tab-progress" class="px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 whitespace-nowrap transition">📈 Monitoring Progres</button>
-                `;
+                tabs.push({ id: "riwayat", label: "📋 Semua Riwayat" });
+                tabs.push({ id: "progress", label: "📊 Progres & Grafik" });
             } else if (currentUser.role === "Admin") {
-                nav.innerHTML = `
-                    <button onclick="switchTab('penugasan')" id="tab-penugasan" class="px-3 py-2 rounded-lg bg-indigo-50 text-indigo-600 whitespace-nowrap transition">👥 Penugasan Klien</button>
-                    <button onclick="switchTab('terapis')" id="tab-terapis" class="px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 whitespace-nowrap transition">👨‍💼 Kelola Terapis</button>
-                    <button onclick="switchTab('riwayat')" id="tab-riwayat" class="px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 whitespace-nowrap transition">📋 Audit Sesi</button>
-                    <button onclick="switchTab('progress')" id="tab-progress" class="px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 whitespace-nowrap transition">📈 Progres Global</button>
-                `;
+                tabs.push({ id: "penugasan", label: "👥 Penugasan Klien" });
+                tabs.push({ id: "terapis", label: "👨‍💼 Kelola Terapis" });
+                tabs.push({ id: "riwayat", label: "📋 Riwayat Sesi" });
+                tabs.push({ id: "progress", label: "📊 Progres Klien" });
             }
+
+            tabs.forEach(t => {
+                const btn = document.createElement("button");
+                btn.id = `tab-btn-${t.id}`;
+                btn.className = "px-3 py-1.5 rounded-xl transition font-medium text-slate-600 hover:bg-slate-100";
+                btn.textContent = t.label;
+                btn.onclick = () => switchTab(t.id);
+                nav.appendChild(btn);
+            });
         }
 
-        function switchTab(tabName) {
-            ['input', 'riwayat', 'progress', 'terapis', 'penugasan'].forEach(t => {
-                const el = document.getElementById(`content-${t}`);
-                if (el) el.classList.add('hidden');
-                const tabEl = document.getElementById(`tab-${t}`);
-                if (tabEl) tabEl.className = "px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 whitespace-nowrap transition";
+        function switchTab(tabId) {
+            ['input', 'riwayat', 'progress', 'terapis', 'penugasan'].forEach(id => {
+                const el = document.getElementById(`content-${id}`);
+                const btn = document.getElementById(`tab-btn-${id}`);
+                if (el) el.classList.add("hidden");
+                if (btn) btn.className = "px-3 py-1.5 rounded-xl transition font-medium text-slate-600 hover:bg-slate-100";
             });
 
-            const targetContent = document.getElementById(`content-${tabName}`);
-            const targetTab = document.getElementById(`tab-${tabName}`);
-            
-            if (targetContent) targetContent.classList.remove('hidden');
-            if (targetTab) targetTab.className = "px-3 py-2 rounded-lg bg-indigo-50 text-indigo-600 whitespace-nowrap transition font-bold";
+            const targetEl = document.getElementById(`content-${tabId}`);
+            const targetBtn = document.getElementById(`tab-btn-${tabId}`);
+            if (targetEl) targetEl.classList.remove("hidden");
+            if (targetBtn) targetBtn.className = "px-3 py-1.5 rounded-xl transition font-bold bg-indigo-50 text-indigo-600 shadow-sm";
 
-            if (tabName === 'riwayat') loadRiwayatSesi();
-            if (tabName === 'progress') loadProgressCharts();
-            if (tabName === 'terapis' || tabName === 'penugasan') loadAdminData();
+            if (tabId === 'riwayat') loadRiwayatSesi();
+            if (tabId === 'progress') loadProgressCharts();
+            if (tabId === 'terapis' || tabId === 'penugasan') loadAdminData();
         }
 
         function loadKlienDropdown() {
             const select = document.getElementById("select-klien");
             if (!select) return;
-            select.innerHTML = "";
+            const klienList = JSON.parse(localStorage.getItem("hyui_klien")) || [];
             
-            let klienList = JSON.parse(localStorage.getItem("hyui_klien"));
+            let filtered = klienList;
             if (currentUser.role === "Terapis") {
-                klienList = klienList.filter(k => k.terapisEmail === currentUser.email);
+                filtered = klienList.filter(k => k.terapisEmail === currentUser.email);
             }
 
-            if (klienList.length === 0) {
-                let opt = document.createElement("option");
-                opt.textContent = "Belum ada klien yang ditugaskan kepada Anda";
-                select.appendChild(opt);
+            select.innerHTML = "";
+            if (filtered.length === 0) {
+                select.innerHTML = `<option value="">Belum ada klien ditugaskan</option>`;
                 return;
             }
 
-            klienList.forEach(k => {
-                let opt = document.createElement("option");
-                opt.value = k.nama;
-                opt.textContent = `${k.nama} (${k.jenisTerapi})`;
-                select.appendChild(opt);
+            filtered.forEach(k => {
+                select.innerHTML += `<option value="${k.nama}">${k.nama} (${k.jenisTerapi})</option>`;
             });
         }
 
-        // Submit Sesi Terapi Baru dengan Audit Trail Otomatis (User, Timestamp, Kondisi, Progres)
-        function submitSesi(e) {
+        async function submitSesi(e) {
             e.preventDefault();
             const btn = document.getElementById("btn-submit-sesi");
             btn.disabled = true;
-            btn.textContent = "Menyimpan Sesi...";
+            btn.textContent = "Menyimpan Sesi ke Database...";
 
             const now = new Date();
             const timestampFormatted = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
@@ -483,9 +557,7 @@
             const namaKlien = document.getElementById("select-klien").value;
             const progressValue = parseInt(document.getElementById("input-progress").value);
 
-            const newSesi = {
-                id: "SESI-" + Math.floor(100000 + Math.random() * 900000),
-                timestamp: timestampFormatted,
+            const sesiDataPayload = {
                 emailTerapis: currentUser.email,
                 namaTerapis: currentUser.nama,
                 namaKlien: namaKlien,
@@ -502,21 +574,30 @@
                 catatan: document.getElementById("input-catatan").value || "-"
             };
 
-            setTimeout(() => {
-                // Simpan ke Sesi Terapi
+            const apiUrl = localStorage.getItem("hyui_api_url");
+            if (apiUrl) {
+                await callBackend("input_sesi", sesiDataPayload);
+                await fetchDashboardDataFromCloud();
+            } else {
+                const newSesi = {
+                    id: "SESI-" + Math.floor(100000 + Math.random() * 900000),
+                    timestamp: timestampFormatted,
+                    ...sesiDataPayload
+                };
                 let sesiList = JSON.parse(localStorage.getItem("hyui_sesi_terapi")) || [];
                 sesiList.unshift(newSesi);
                 localStorage.setItem("hyui_sesi_terapi", JSON.stringify(sesiList));
 
-                // Perbarui progres klien secara otomatis
                 let klienList = JSON.parse(localStorage.getItem("hyui_klien"));
                 const klienObj = klienList.find(k => k.nama === namaKlien);
                 if (klienObj) {
                     klienObj.progressTerakhir = progressValue;
                     localStorage.setItem("hyui_klien", JSON.stringify(klienList));
                 }
+            }
 
-                showModal("Berhasil Disimpan!", "Sesi terapi berhasil direkam. Audit trail (pencatat & waktu) serta pembaruan progres klien otomatis diperbarui.", "✅");
+            setTimeout(() => {
+                showModal("Berhasil Disimpan!", "Sesi terapi berhasil direkam dan disinkronkan dengan database.", "✅");
                 document.getElementById("sesi-form").reset();
                 document.getElementById("input-tanggal").valueAsDate = new Date();
                 
@@ -524,6 +605,62 @@
                 btn.textContent = "💾 Simpan Sesi (Audit Trail Otomatis)";
                 switchTab('riwayat');
             }, 400);
+        }
+
+        async function submitAkunTerapis(e) {
+            e.preventDefault();
+            const nama = document.getElementById("new-terapis-nama").value;
+            const email = document.getElementById("new-terapis-email").value;
+            const pass = document.getElementById("new-terapis-pass").value;
+
+            const apiUrl = localStorage.getItem("hyui_api_url");
+            if (apiUrl) {
+                const res = await callBackend("create_terapis", { email, password: pass, nama });
+                if (res && res.status === "success") {
+                    showModal("Sukses", `Akun terapis ${nama} berhasil dibuat di Google Sheets!`, "✅");
+                    document.getElementById("terapis-form").reset();
+                    loadAdminData();
+                } else {
+                    showModal("Gagal", res.message || "Gagal membuat akun.", "⚠️");
+                }
+            } else {
+                let users = JSON.parse(localStorage.getItem("hyui_users"));
+                if (users.some(u => u.email === email)) {
+                    showModal("Gagal", "Email terapis tersebut sudah terdaftar di sistem!", "⚠️");
+                    return;
+                }
+                users.push({ email, password: pass, nama, role: "Terapis" });
+                localStorage.setItem("hyui_users", JSON.stringify(users));
+                showModal("Sukses", `Akun terapis ${nama} berhasil dibuat!`, "✅");
+                document.getElementById("terapis-form").reset();
+                loadAdminData();
+            }
+        }
+
+        async function submitPenugasan(e) {
+            e.preventDefault();
+            const namaKlien = document.getElementById("admin-select-klien").value;
+            const terapisEmail = document.getElementById("admin-select-terapis").value;
+
+            const apiUrl = localStorage.getItem("hyui_api_url");
+            if (apiUrl) {
+                const res = await callBackend("assign_klien", { namaKlien, terapisEmail });
+                if (res && res.status === "success") {
+                    showModal("Sukses", `Penugasan klien ${namaKlien} berhasil diperbarui di Google Sheets.`, "✅");
+                    loadAdminData();
+                } else {
+                    showModal("Gagal", res.message || "Gagal memperbarui penugasan.", "⚠️");
+                }
+            } else {
+                let klienList = JSON.parse(localStorage.getItem("hyui_klien"));
+                const klienObj = klienList.find(k => k.nama === namaKlien);
+                if (klienObj) {
+                    klienObj.terapisEmail = terapisEmail;
+                    localStorage.setItem("hyui_klien", JSON.stringify(klienList));
+                    showModal("Sukses", `Klien ${namaKlien} berhasil ditugaskan ke terapis ${terapisEmail}.`, "✅");
+                    loadAdminData();
+                }
+            }
         }
 
         function loadRiwayatSesi() {
@@ -583,6 +720,7 @@
 
         function loadProgressCharts() {
             const container = document.getElementById("progress-charts-container");
+            if (!container) return;
             let sesiList = JSON.parse(localStorage.getItem("hyui_sesi_terapi")) || [];
             let klienList = JSON.parse(localStorage.getItem("hyui_klien"));
 
@@ -639,7 +777,6 @@
             });
         }
 
-        // Fungsi Khusus Admin: Membuat Akun Terapis
         function submitAkunTerapis(e) {
             e.preventDefault();
             const nama = document.getElementById("new-terapis-nama").value;
@@ -660,7 +797,6 @@
             loadAdminData();
         }
 
-        // Fungsi Khusus Admin: Penugasan Klien ke Terapis
         function submitPenugasan(e) {
             e.preventDefault();
             const namaKlien = document.getElementById("admin-select-klien").value;
@@ -681,7 +817,6 @@
             const terapisList = users.filter(u => u.role === "Terapis");
             const klienList = JSON.parse(localStorage.getItem("hyui_klien"));
 
-            // Render list terapis
             const listTerapisEl = document.getElementById("list-terapis-admin");
             if (listTerapisEl) {
                 listTerapisEl.innerHTML = "";
@@ -698,7 +833,6 @@
                 });
             }
 
-            // Render select & list penugasan
             const selectKlien = document.getElementById("admin-select-klien");
             const selectTerapis = document.getElementById("admin-select-terapis");
             const listPenugasan = document.getElementById("list-penugasan-admin");
