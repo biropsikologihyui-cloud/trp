@@ -34,6 +34,9 @@
                 </div>
                 <h1 class="text-2xl font-bold text-slate-900">Biro Psikologi Hyui</h1>
                 <p class="text-xs text-slate-500 mt-1 uppercase tracking-wider font-medium">Sistem Monitoring Terapi Multi-User</p>
+                <div class="mt-2 inline-flex items-center gap-1.5 text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-full font-semibold">
+                    <span>☁️ Terhubung ke Google Sheets</span>
+                </div>
             </div>
 
             <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
@@ -52,23 +55,6 @@
                     Masuk ke Sistem
                 </button>
             </form>
-
-            <div class="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs space-y-2">
-                <div class="font-bold text-amber-800 flex items-center justify-between">
-                    <span>🔗 URL Backend Apps Script</span>
-                    <span id="sync-status" class="text-[10px] bg-amber-200 text-amber-900 px-2 py-0.5 rounded font-normal">Mode Lokal / Demo</span>
-                </div>
-                <div class="flex gap-2">
-                    <input type="text" id="api-url-input" placeholder="https://script.google.com/macros/s/.../exec" 
-                        class="w-full p-2 border border-amber-300 rounded-lg bg-white text-[11px] focus:outline-none focus:ring-2 focus:ring-amber-500">
-                    <button onclick="saveApiUrl()" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-3 py-2 rounded-lg text-[11px] shrink-0 transition">
-                        Simpan
-                    </button>
-                </div>
-                <p class="text-[10px] text-amber-700 leading-tight">
-                    Tempelkan URL Web App Google Apps Script Anda di sini agar terhubung ke Google Sheets.
-                </p>
-            </div>
 
             <div id="login-error" class="hidden mt-4 p-3 bg-red-50 text-red-600 text-xs rounded-xl text-center font-medium border border-red-100"></div>
 
@@ -284,46 +270,14 @@
     </div>
 
     <script>
-        const DEFAULT_API_URL = localStorage.getItem("hyui_api_url") || "";
-
-        if (DEFAULT_API_URL) {
-            document.addEventListener("DOMContentLoaded", () => {
-                const inputEl = document.getElementById("api-url-input");
-                if (inputEl) inputEl.value = DEFAULT_API_URL;
-                updateSyncBadge(true);
-            });
-        }
-
-        function saveApiUrl() {
-            const url = document.getElementById("api-url-input").value.trim();
-            localStorage.setItem("hyui_api_url", url);
-            if (url) {
-                showModal("URL Disimpan", "Koneksi ke Google Sheets berhasil diatur! Aplikasi sekarang akan berkomunikasi dengan backend Apps Script.", "🌐");
-                updateSyncBadge(true);
-            } else {
-                showModal("Mode Lokal Aktif", "URL dikosongkan. Aplikasi kembali menggunakan LocalStorage browser.", "💻");
-                updateSyncBadge(false);
-            }
-        }
-
-        function updateSyncBadge(isCloud) {
-            const badge = document.getElementById("sync-status");
-            if (!badge) return;
-            if (isCloud) {
-                badge.className = "text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold";
-                badge.textContent = "Terhubung Google Sheets ☁️";
-            } else {
-                badge.className = "text-[10px] bg-amber-200 text-amber-900 px-2 py-0.5 rounded font-normal";
-                badge.textContent = "Mode Lokal / Demo";
-            }
-        }
+        // URL Apps Script sudah dipatenkan langsung ke Google Sheets Anda
+        const DEFAULT_API_URL = "https://script.google.com/macros/s/AKfycbwVeU-9A_8L_60kduKoxWnow1szWceWCw63BVBJrk7w053u4wZ0CAUOL-wiETSl7O-H/exec";
 
         async function callBackend(action, payload = {}) {
-            const apiUrl = localStorage.getItem("hyui_api_url");
-            if (!apiUrl) return null;
+            if (!DEFAULT_API_URL) return null;
 
             try {
-                const response = await fetch(apiUrl, {
+                const response = await fetch(DEFAULT_API_URL, {
                     method: "POST",
                     body: JSON.stringify({ action, ...payload }),
                     headers: { "Content-Type": "text/plain;charset=utf-8" }
@@ -334,26 +288,6 @@
                 console.error("Gagal terhubung ke Google Apps Script:", err);
                 return { status: "error", message: "Gagal terhubung ke server Google Sheets." };
             }
-        }
-
-        if (!localStorage.getItem("hyui_users")) {
-            const initialUsers = [
-                { email: "budi.terapis@hyui.com", password: "123456", nama: "Budi Santoso, S.Psi", role: "Terapis" },
-                { email: "siti.terapis@hyui.com", password: "123456", nama: "Siti Aminah, M.Psi", role: "Terapis" },
-                { email: "admin@hyui.com", password: "123456", nama: "Administrator Utama", role: "Admin" },
-                { email: "supervisor@hyui.com", password: "123456", nama: "Dr. Hendra, Psikolog", role: "Supervisor" }
-            ];
-            localStorage.setItem("hyui_users", JSON.stringify(initialUsers));
-        }
-
-        if (!localStorage.getItem("hyui_klien")) {
-            const initialKlien = [
-                { id: "K-001", nama: "Andi Pratama", terapisEmail: "budi.terapis@hyui.com", jenisTerapi: "Fisioterapi & Motorik", progressTerakhir: 75 },
-                { id: "K-002", nama: "Dewi Lestari", terapisEmail: "budi.terapis@hyui.com", jenisTerapi: "Terapi Wicara", progressTerakhir: 60 },
-                { id: "K-003", nama: "Rizky Ramadhan", terapisEmail: "siti.terapis@hyui.com", jenisTerapi: "Terapi Perilaku", progressTerakhir: 50 },
-                { id: "K-004", nama: "Sinta Maharani", terapisEmail: "siti.terapis@hyui.com", jenisTerapi: "Okupasi Terapi", progressTerakhir: 40 }
-            ];
-            localStorage.setItem("hyui_klien", JSON.stringify(initialKlien));
         }
 
         let currentUser = null;
@@ -381,38 +315,23 @@
             const pass = document.getElementById("login-password").value;
             const errEl = document.getElementById("login-error");
 
-            const apiUrl = localStorage.getItem("hyui_api_url");
-            if (apiUrl) {
-                errEl.textContent = "Menghubungkan ke Google Sheets...";
-                errEl.classList.remove("hidden");
-                const res = await callBackend("login", { email, password: pass });
-                if (res && res.status === "success") {
-                    currentUser = res.user;
-                    errEl.classList.add("hidden");
-                    await fetchDashboardDataFromCloud();
-                    initDashboard();
-                } else {
-                    errEl.textContent = res ? res.message : "Gagal autentikasi.";
-                    errEl.classList.remove("hidden");
-                }
+            errEl.textContent = "Menghubungkan ke Google Sheets...";
+            errEl.classList.remove("hidden");
+
+            const res = await callBackend("login", { email, password: pass });
+            if (res && res.status === "success") {
+                currentUser = res.user;
+                errEl.classList.add("hidden");
+                await fetchDashboardDataFromCloud();
+                initDashboard();
             } else {
-                const users = JSON.parse(localStorage.getItem("hyui_users"));
-                const found = users.find(u => u.email === email && u.password === pass);
-                
-                if (found) {
-                    currentUser = found;
-                    errEl.classList.add("hidden");
-                    initDashboard();
-                } else {
-                    errEl.textContent = "Email atau password salah! (Gunakan tombol akses cepat di bawah untuk demo)";
-                    errEl.classList.remove("hidden");
-                }
+                errEl.textContent = res ? res.message : "Gagal autentikasi.";
+                errEl.classList.remove("hidden");
             }
         }
 
         async function fetchDashboardDataFromCloud() {
-            const apiUrl = localStorage.getItem("hyui_api_url");
-            if (!apiUrl) return;
+            if (!DEFAULT_API_URL) return;
             const res = await callBackend("get_dashboard_data", { email: currentUser.email, role: currentUser.role });
             if (res && res.status === "success") {
                 localStorage.setItem("hyui_klien", JSON.stringify(res.klien));
@@ -532,11 +451,8 @@
             e.preventDefault();
             const btn = document.getElementById("btn-submit-sesi");
             btn.disabled = true;
-            btn.textContent = "Menyimpan Sesi ke Database...";
+            btn.textContent = "Menyimpan Sesi ke Google Sheets...";
 
-            const now = new Date();
-            const timestampFormatted = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-            
             const namaKlien = document.getElementById("select-klien").value;
             const progressValue = parseInt(document.getElementById("input-progress").value);
 
@@ -557,30 +473,11 @@
                 catatan: document.getElementById("input-catatan").value || "-"
             };
 
-            const apiUrl = localStorage.getItem("hyui_api_url");
-            if (apiUrl) {
-                await callBackend("input_sesi", sesiDataPayload);
-                await fetchDashboardDataFromCloud();
-            } else {
-                const newSesi = {
-                    id: "SESI-" + Math.floor(100000 + Math.random() * 900000),
-                    timestamp: timestampFormatted,
-                    ...sesiDataPayload
-                };
-                let sesiList = JSON.parse(localStorage.getItem("hyui_sesi_terapi")) || [];
-                sesiList.unshift(newSesi);
-                localStorage.setItem("hyui_sesi_terapi", JSON.stringify(sesiList));
-
-                let klienList = JSON.parse(localStorage.getItem("hyui_klien"));
-                const klienObj = klienList.find(k => k.nama === namaKlien);
-                if (klienObj) {
-                    klienObj.progressTerakhir = progressValue;
-                    localStorage.setItem("hyui_klien", JSON.stringify(klienList));
-                }
-            }
+            await callBackend("input_sesi", sesiDataPayload);
+            await fetchDashboardDataFromCloud();
 
             setTimeout(() => {
-                showModal("Berhasil Disimpan!", "Sesi terapi berhasil direkam dan disinkronkan dengan database.", "✅");
+                showModal("Berhasil Disimpan!", "Sesi terapi berhasil direkam dan disinkronkan dengan Google Sheets.", "✅");
                 document.getElementById("sesi-form").reset();
                 document.getElementById("input-tanggal").valueAsDate = new Date();
                 
@@ -596,28 +493,14 @@
             const email = document.getElementById("new-terapis-email").value;
             const pass = document.getElementById("new-terapis-pass").value;
 
-            const apiUrl = localStorage.getItem("hyui_api_url");
-            if (apiUrl) {
-                const res = await callBackend("create_terapis", { email, password: pass, nama });
-                if (res && res.status === "success") {
-                    showModal("Sukses", `Akun terapis ${nama} berhasil dibuat di Google Sheets!`, "✅");
-                    document.getElementById("terapis-form").reset();
-                    await fetchDashboardDataFromCloud();
-                    loadAdminData();
-                } else {
-                    showModal("Gagal", res.message || "Gagal membuat akun.", "⚠️");
-                }
-            } else {
-                let users = JSON.parse(localStorage.getItem("hyui_users"));
-                if (users.some(u => u.email === email)) {
-                    showModal("Gagal", "Email terapis tersebut sudah terdaftar di sistem!", "⚠️");
-                    return;
-                }
-                users.push({ email, password: pass, nama, role: "Terapis" });
-                localStorage.setItem("hyui_users", JSON.stringify(users));
-                showModal("Sukses", `Akun terapis ${nama} berhasil dibuat!`, "✅");
+            const res = await callBackend("create_terapis", { email, password: pass, nama });
+            if (res && res.status === "success") {
+                showModal("Sukses", `Akun terapis ${nama} berhasil dibuat di Google Sheets!`, "✅");
                 document.getElementById("terapis-form").reset();
+                await fetchDashboardDataFromCloud();
                 loadAdminData();
+            } else {
+                showModal("Gagal", res.message || "Gagal membuat akun.", "⚠️");
             }
         }
 
@@ -626,25 +509,13 @@
             const namaKlien = document.getElementById("admin-select-klien").value;
             const terapisEmail = document.getElementById("admin-select-terapis").value;
 
-            const apiUrl = localStorage.getItem("hyui_api_url");
-            if (apiUrl) {
-                const res = await callBackend("assign_klien", { namaKlien, terapisEmail });
-                if (res && res.status === "success") {
-                    showModal("Sukses", `Penugasan klien ${namaKlien} berhasil diperbarui di Google Sheets.`, "✅");
-                    await fetchDashboardDataFromCloud();
-                    loadAdminData();
-                } else {
-                    showModal("Gagal", res.message || "Gagal memperbarui penugasan.", "⚠️");
-                }
+            const res = await callBackend("assign_klien", { namaKlien, terapisEmail });
+            if (res && res.status === "success") {
+                showModal("Sukses", `Penugasan klien ${namaKlien} berhasil diperbarui di Google Sheets.`, "✅");
+                await fetchDashboardDataFromCloud();
+                loadAdminData();
             } else {
-                let klienList = JSON.parse(localStorage.getItem("hyui_klien"));
-                const klienObj = klienList.find(k => k.nama === namaKlien);
-                if (klienObj) {
-                    klienObj.terapisEmail = terapisEmail;
-                    localStorage.setItem("hyui_klien", JSON.stringify(klienList));
-                    showModal("Sukses", `Klien ${namaKlien} berhasil ditugaskan ke terapis ${terapisEmail}.`, "✅");
-                    loadAdminData();
-                }
+                showModal("Gagal", res.message || "Gagal memperbarui penugasan.", "⚠️");
             }
         }
 
