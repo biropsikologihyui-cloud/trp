@@ -59,14 +59,14 @@
                     <span id="sync-status" class="text-[10px] bg-amber-200 text-amber-900 px-2 py-0.5 rounded font-normal">Mode Lokal / Demo</span>
                 </div>
                 <div class="flex gap-2">
-                    <input type="text" id="api-url-input" placeholder="https://script.google.com/macros/s/AKfycbwVeU-9A_8L_60kduKoxWnow1szWceWCw63BVBJrk7w053u4wZ0CAUOL-wiETSl7O-H/exec" 
+                    <input type="text" id="api-url-input" placeholder="https://script.google.com/macros/s/.../exec" 
                         class="w-full p-2 border border-amber-300 rounded-lg bg-white text-[11px] focus:outline-none focus:ring-2 focus:ring-amber-500">
                     <button onclick="saveApiUrl()" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-3 py-2 rounded-lg text-[11px] shrink-0 transition">
                         Simpan
                     </button>
                 </div>
                 <p class="text-[10px] text-amber-700 leading-tight">
-                    Jika dikosongkan, aplikasi berjalan menggunakan memori browser lokal (LocalStorage). Jika diisi, data otomatis tersimpan & tersinkron ke Google Sheets!
+                    Tempelkan URL Web App Google Apps Script Anda di sini agar terhubung ke Google Sheets.
                 </p>
             </div>
 
@@ -320,7 +320,7 @@
 
         async function callBackend(action, payload = {}) {
             const apiUrl = localStorage.getItem("hyui_api_url");
-            if (!apiUrl) return null; // Fallback ke LocalStorage jika URL kosong
+            if (!apiUrl) return null;
 
             try {
                 const response = await fetch(apiUrl, {
@@ -336,6 +336,7 @@
             }
         }
 
+        // Inisialisasi Fallback LocalStorage (jika belum ada)
         if (!localStorage.getItem("hyui_users")) {
             const initialUsers = [
                 { email: "budi.terapis@hyui.com", password: "123456", nama: "Budi Santoso, S.Psi", role: "Terapis" },
@@ -354,30 +355,6 @@
                 { id: "K-004", nama: "Sinta Maharani", terapisEmail: "siti.terapis@hyui.com", jenisTerapi: "Okupasi Terapi", progressTerakhir: 40 }
             ];
             localStorage.setItem("hyui_klien", JSON.stringify(initialKlien));
-        }
-
-        if (!localStorage.getItem("hyui_sesi_terapi")) {
-            const initialSesi = [
-                { 
-                    id: "SESI-94812", 
-                    timestamp: "2026-08-30 14:00", 
-                    emailTerapis: "budi.terapis@hyui.com", 
-                    namaTerapis: "Budi Santoso, S.Psi",
-                    namaKlien: "Andi Pratama", 
-                    tanggal: "2026-08-30", 
-                    jam: "14:00", 
-                    target: "Ketahanan motorik halus", 
-                    aktivitas: "Menggunting kertas pola lurus", 
-                    kondisiSebelum: "Cemas & kaku",
-                    kondisiSesudah: "Lebih rileks & fokus",
-                    respons: "Sangat Baik",
-                    progress: 75,
-                    kendala: "-",
-                    rencana: "Lanjutkan pola melengkung",
-                    catatan: "Klien sangat kooperatif"
-                }
-            ];
-            localStorage.setItem("hyui_sesi_terapi", JSON.stringify(initialSesi));
         }
 
         let currentUser = null;
@@ -407,7 +384,6 @@
 
             const apiUrl = localStorage.getItem("hyui_api_url");
             if (apiUrl) {
-                // Login via Google Apps Script Backend
                 errEl.textContent = "Menghubungkan ke Google Sheets...";
                 errEl.classList.remove("hidden");
                 const res = await callBackend("login", { email, password: pass });
@@ -421,7 +397,6 @@
                     errEl.classList.remove("hidden");
                 }
             } else {
-                // Login via LocalStorage (Demo Mode)
                 const users = JSON.parse(localStorage.getItem("hyui_users"));
                 const found = users.find(u => u.email === email && u.password === pass);
                 
@@ -443,6 +418,15 @@
             if (res && res.status === "success") {
                 localStorage.setItem("hyui_klien", JSON.stringify(res.klien));
                 localStorage.setItem("hyui_sesi_terapi", JSON.stringify(res.sesi));
+                if (res.terapis) {
+                    let users = JSON.parse(localStorage.getItem("hyui_users")) || [];
+                    res.terapis.forEach(t => {
+                        if (!users.some(u => u.email === t.email)) {
+                            users.push({ email: t.email, nama: t.nama, role: "Terapis" });
+                        }
+                    });
+                    localStorage.setItem("hyui_users", JSON.stringify(users));
+                }
             }
         }
 
@@ -619,6 +603,7 @@
                 if (res && res.status === "success") {
                     showModal("Sukses", `Akun terapis ${nama} berhasil dibuat di Google Sheets!`, "✅");
                     document.getElementById("terapis-form").reset();
+                    await fetchDashboardDataFromCloud();
                     loadAdminData();
                 } else {
                     showModal("Gagal", res.message || "Gagal membuat akun.", "⚠️");
@@ -647,6 +632,7 @@
                 const res = await callBackend("assign_klien", { namaKlien, terapisEmail });
                 if (res && res.status === "success") {
                     showModal("Sukses", `Penugasan klien ${namaKlien} berhasil diperbarui di Google Sheets.`, "✅");
+                    await fetchDashboardDataFromCloud();
                     loadAdminData();
                 } else {
                     showModal("Gagal", res.message || "Gagal memperbarui penugasan.", "⚠️");
@@ -722,7 +708,7 @@
             const container = document.getElementById("progress-charts-container");
             if (!container) return;
             let sesiList = JSON.parse(localStorage.getItem("hyui_sesi_terapi")) || [];
-            let klienList = JSON.parse(localStorage.getItem("hyui_klien"));
+            let klienList = JSON.parse(localStorage.getItem("hyui_klien")) || [];
 
             if (currentUser.role === "Terapis") {
                 const klienAssigned = klienList.filter(k => k.terapisEmail === currentUser.email).map(k => k.nama);
@@ -777,45 +763,10 @@
             });
         }
 
-        function submitAkunTerapis(e) {
-            e.preventDefault();
-            const nama = document.getElementById("new-terapis-nama").value;
-            const email = document.getElementById("new-terapis-email").value;
-            const pass = document.getElementById("new-terapis-pass").value;
-
-            let users = JSON.parse(localStorage.getItem("hyui_users"));
-            if (users.some(u => u.email === email)) {
-                showModal("Gagal", "Email terapis tersebut sudah terdaftar di sistem!", "⚠️");
-                return;
-            }
-
-            users.push({ email, password: pass, nama, role: "Terapis" });
-            localStorage.setItem("hyui_users", JSON.stringify(users));
-
-            showModal("Sukses", `Akun terapis ${nama} berhasil dibuat!`, "✅");
-            document.getElementById("terapis-form").reset();
-            loadAdminData();
-        }
-
-        function submitPenugasan(e) {
-            e.preventDefault();
-            const namaKlien = document.getElementById("admin-select-klien").value;
-            const terapisEmail = document.getElementById("admin-select-terapis").value;
-
-            let klienList = JSON.parse(localStorage.getItem("hyui_klien"));
-            const klienObj = klienList.find(k => k.nama === namaKlien);
-            if (klienObj) {
-                klienObj.terapisEmail = terapisEmail;
-                localStorage.setItem("hyui_klien", JSON.stringify(klienList));
-                showModal("Sukses", `Klien ${namaKlien} berhasil ditugaskan ke terapis ${terapisEmail}. Terapis kini dapat melihat dan mencatat sesi klien ini.`, "✅");
-                loadAdminData();
-            }
-        }
-
         function loadAdminData() {
-            const users = JSON.parse(localStorage.getItem("hyui_users"));
+            const users = JSON.parse(localStorage.getItem("hyui_users")) || [];
             const terapisList = users.filter(u => u.role === "Terapis");
-            const klienList = JSON.parse(localStorage.getItem("hyui_klien"));
+            const klienList = JSON.parse(localStorage.getItem("hyui_klien")) || [];
 
             const listTerapisEl = document.getElementById("list-terapis-admin");
             if (listTerapisEl) {
